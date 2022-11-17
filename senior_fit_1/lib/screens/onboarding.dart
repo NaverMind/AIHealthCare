@@ -12,10 +12,10 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   late FocusNode myFocusNode;
-
+  late SharedPreferences prefs;
   String strName = 'ex) 홍길동';
   String strSex = 'ex) 여';
-  String strBirth = 'ex) XXXX.XX.XX';
+  String strBirth = 'ex) 65';
   String strHeigth = 'ex) 160';
   String strWeigth = 'ex) 60';
 
@@ -25,10 +25,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   late bool cmpHeight;
   late bool cmpWeight;
 
+  Future<void> initPref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
     super.initState();
-
+    initPref();
     cmpName = false;
     cmpSex = false;
     cmpBirth = false;
@@ -71,6 +75,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   controller: cntrName,
                   onSubmitted: (text) {
                     setState(() {
+                      prefs.setString('name', text);
                       cmpName = true;
                     });
                   },
@@ -116,6 +121,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             controller: cntrSex,
             onSubmitted: (text) {
               setState(() {
+                prefs.setString('sex', text);
                 cmpSex = true;
               });
             },
@@ -138,9 +144,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: getPageDecoration(),
         ),
         PageViewModel(
-          // 생년월일
+          // 나이
           titleWidget: Text(
-            '생년월일을 입력해주세요.',
+            '나이를 입력해주세요.',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -160,6 +166,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             controller: cntrBirth,
             onSubmitted: (text) {
               setState(() {
+                prefs.setString('birth', text);
                 cmpBirth = true;
               });
             },
@@ -204,6 +211,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             controller: cntrHeight,
             onSubmitted: (text) {
               setState(() {
+                prefs.setString('height', text);
                 cmpHeight = true;
               });
             },
@@ -248,6 +256,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             controller: cntrWeight,
             onSubmitted: (text) {
               setState(() {
+                prefs.setString('weight', text);
                 cmpWeight = true;
               });
             },
@@ -271,15 +280,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
       ],
       done: const Text('done'),
-      onDone: () async {
-        final prefs = await SharedPreferences.getInstance();
+      onDone: () {
         prefs.setBool('visited', true);
-        prefs.setString('name', cntrName.text);
-        prefs.setString('weight', cntrWeight.text);
-        prefs.setString('birth', cntrBirth.text);
-        prefs.setString('height', cntrHeight.text);
-        prefs.setString('sex', cntrSex.text);
-        print(prefs.getKeys());
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => MyHomePage()));
       },

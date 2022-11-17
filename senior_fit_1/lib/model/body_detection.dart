@@ -27,14 +27,17 @@ class _DetectPageState extends State<DetectPage> {
   Image? _cameraImage;
   Size _imageSize = Size.zero;
   int currentMilliSecondsCompleteImage = DateTime.now().millisecondsSinceEpoch;
+  int currentMilliSecondsPostTemp = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
   late int infTime;
+  late int dectTime;
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
 
     if (request.isGranted) {
       await BodyDetection.enablePoseDetection();
+      print('☠️ enable~startCameraStream');
       await BodyDetection.startCameraStream(
         onFrameAvailable: _handleCameraImage,
         onPoseAvailable: (pose) {
@@ -96,6 +99,8 @@ class _DetectPageState extends State<DetectPage> {
 
     setState(() {
       infTime = currentMilliSecondsCompletePose -currentMilliSecondsCompleteImage;
+      dectTime = currentMilliSecondsCompletePose -currentMilliSecondsPostTemp;
+      currentMilliSecondsPostTemp = currentMilliSecondsCompletePose;
       print('💡 InfTime: $infTime');
       _detectedPose = pose;
     });
@@ -125,6 +130,14 @@ class _DetectPageState extends State<DetectPage> {
           OutlinedButton(
             onPressed: (){},
             child: Text('InfTime: $infTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
+          ),
+          OutlinedButton(
+            onPressed: (){},
+            child: Text('DectTime: $dectTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
+          ),
+          OutlinedButton(
+            onPressed: (){},
+            child: Text('IO Time: ${dectTime-infTime}',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
           ),
         ],
       ),

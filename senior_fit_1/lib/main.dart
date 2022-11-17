@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   prefs = await SharedPreferences.getInstance();
-  await prefs.clear(); // for test
+  // await prefs.clear(); // for test
   runApp(const MyApp());
 }
 
