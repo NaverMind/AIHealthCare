@@ -10,8 +10,8 @@ class LineChartSample2 extends StatefulWidget {
 
 class _LineChartSample2State extends State<LineChartSample2> {
   List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
+    const Color(0xff7209B7),
+    const Color(0xff7209B7),
   ];
 
   bool showAvg = false;
@@ -27,7 +27,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
               borderRadius: BorderRadius.all(
                 Radius.circular(18),
               ),
-              color: Color(0xff232d37),
+              color: Color(0xffe4def5),
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -42,24 +42,6 @@ class _LineChartSample2State extends State<LineChartSample2> {
             ),
           ),
         ),
-        SizedBox(
-          width: 60,
-          height: 34,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                showAvg = !showAvg;
-              });
-            },
-            child: Text(
-              'avg',
-              style: TextStyle(
-                fontSize: 12,
-                color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -68,18 +50,30 @@ class _LineChartSample2State extends State<LineChartSample2> {
     const style = TextStyle(
       color: Color(0xff68737d),
       fontWeight: FontWeight.bold,
-      fontSize: 16,
+      fontSize: 13,
     );
     Widget text;
     switch (value.toInt()) {
+      case 0:
+        text = const Text('6일전', style: style);
+        break;
+      case 1:
+        text = const Text('5일전', style: style);
+        break;
       case 2:
-        text = const Text('MAR', style: style);
+        text = const Text('4일전', style: style);
+        break;
+      case 3:
+        text = const Text('3일전', style: style);
+        break;
+      case 4:
+        text = const Text('2일전', style: style);
         break;
       case 5:
-        text = const Text('JUN', style: style);
+        text = const Text('1일전', style: style);
         break;
-      case 8:
-        text = const Text('SEP', style: style);
+      case 6:
+        text = const Text('today', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -100,14 +94,14 @@ class _LineChartSample2State extends State<LineChartSample2> {
     );
     String text;
     switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
+      case 0:
+        text = '0';
         break;
       case 5:
-        text = '50k';
+        text = '50';
+        break;
+      case 10:
+        text = '100';
         break;
       default:
         return Container();
@@ -119,20 +113,20 @@ class _LineChartSample2State extends State<LineChartSample2> {
   LineChartData mainData() {
     return LineChartData(
       gridData: FlGridData(
-        show: true,
+        show: false,
         drawVerticalLine: true,
         horizontalInterval: 1,
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: const Color(0xffe4def5),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
+            color: const Color(0xffc1aff5),
+            strokeWidth: 5,
           );
         },
       ),
@@ -162,23 +156,23 @@ class _LineChartSample2State extends State<LineChartSample2> {
         ),
       ),
       borderData: FlBorderData(
-        show: true,
+        show: false,
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 0,
-      maxX: 11,
+      maxX: 6,
       minY: 0,
-      maxY: 6,
+      maxY: 10,
       lineBarsData: [
         LineChartBarData(
           spots: const [
             FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
+            FlSpot(1, 4),
+            FlSpot(2, 7),
+            FlSpot(3, 9),
+            FlSpot(4, 7),
+            FlSpot(5, 2),
+            FlSpot(6, 7),
           ],
           isCurved: true,
           gradient: LinearGradient(
@@ -187,7 +181,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
-            show: false,
+            show: true,
           ),
           belowBarData: BarAreaData(
             show: true,
@@ -260,12 +254,12 @@ class _LineChartSample2State extends State<LineChartSample2> {
         LineChartBarData(
           spots: const [
             FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
+            FlSpot(1, 3.44),
+            FlSpot(2, 3.44),
+            FlSpot(3, 3.44),
+            FlSpot(4, 3.44),
+            FlSpot(5, 3.44),
+            FlSpot(6, 3.44),
           ],
           isCurved: true,
           gradient: LinearGradient(

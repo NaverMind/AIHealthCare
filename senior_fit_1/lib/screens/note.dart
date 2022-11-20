@@ -36,7 +36,7 @@ class _MyPageState extends State<Note> {
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      '플랭크',
+                      ' 플랭크',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class _MyPageState extends State<Note> {
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      '푸시업',
+                      ' 푸시업',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class _MyPageState extends State<Note> {
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      '무릎 푸시업',
+                      ' 무릎 푸시업',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -123,7 +123,7 @@ class _MyPageState extends State<Note> {
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      '사이드 크런치',
+                      ' 사이드 크런치',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

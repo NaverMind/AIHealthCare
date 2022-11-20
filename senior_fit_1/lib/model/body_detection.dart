@@ -100,6 +100,7 @@ class _DetectPageState extends State<DetectPage> {
     });
   }
 
+
   Widget get _cameraDetectionView => SingleChildScrollView(
         child: Center(
           child: Column(
