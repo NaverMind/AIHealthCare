@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     bool visited = prefs.getBool('visited') ?? false;
     return MaterialApp(
-      home: visited ? MyHomePage() : OnBoardingPage(),
+      home: visited ? const MyHomePage() : const OnBoardingPage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({
+  const MyHomePage({
     Key? key,
     this.title,
   }) : super(key: key);
@@ -50,16 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
       Icons.sticky_note_2_rounded,
       "운동노트",
       Colors.blue,
-      labelStyle: TextStyle(
-        fontWeight: FontWeight.normal,
+      labelStyle: const TextStyle(
+        color: Colors.blue,
+        fontWeight: FontWeight.bold,
       ),
     ),
     TabItem(
       Icons.home,
       "홈",
-      Colors.orange,
-      labelStyle: TextStyle(
-        color: Colors.red,
+      Colors.purple,
+      labelStyle: const TextStyle(
+        color: Colors.purple,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -67,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Icons.account_box,
       "마이페이지",
       Colors.red,
+      labelStyle: const TextStyle(
+        color: Colors.red,
+        fontWeight: FontWeight.bold,
+      ),
     ),
   ]);
 
@@ -98,13 +103,13 @@ class _MyHomePageState extends State<MyHomePage> {
     String slogan;
     switch (selectedPos) {
       case 0:
-        return Note();
+        return const Note();
       case 1:
-        return Homelist();
+        return const Homelist();
       case 2:
-        return MyPage();
+        return const MyPage();
       default:
-        return Center(child: Text('Error'));
+        return const Center(child: Text('Error'));
     }
 
   }
@@ -117,9 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
       barHeight: bottomNavBarHeight,
       barBackgroundColor: Colors.white,
       backgroundBoxShadow: <BoxShadow>[
-        BoxShadow(color: Colors.black45, blurRadius: 10.0),
+        const BoxShadow(color: Colors.black45, blurRadius: 10.0),
       ],
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       selectedCallback: (int? selectedPos) {
         setState(() {
           this.selectedPos = selectedPos ?? 0;

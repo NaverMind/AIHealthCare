@@ -135,11 +135,11 @@ class PoseMaskPainter extends CustomPainter {
       // tp.paint(canvas, offsetForPart(part));
     }
     //Text(reps.toString());
-    inDownPosition(myList);
-    inUpPosition(myList);
-    print(reps);
-    print(downPosition);
-    print(upPosition);
+    // inDownPosition(myList);
+    // inUpPosition(myList);
+    // print(reps);
+    // print(downPosition);
+    // print(upPosition);
 
   }
 

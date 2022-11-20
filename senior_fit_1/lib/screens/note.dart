@@ -13,9 +13,9 @@ class _MyPageState extends State<Note> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('운동 노트'),
+        title: const Text('운동 노트'),
         backgroundColor: Colors.white,
-        titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 23),
+        titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 23),
         elevation: 0.0,
       ),
       body: Container(
@@ -28,14 +28,14 @@ class _MyPageState extends State<Note> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    SizedBox(width: 12,),
+                    const SizedBox(width: 20,),
                     Image.asset(
                       'images/plank.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
-                    Text(
+                    const Text(
                       ' 플랭크',
                       style: TextStyle(
                         color: Colors.black,
@@ -46,25 +46,25 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
                 child: LineChartSample2(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    SizedBox(width: 12,),
+                    const SizedBox(width: 20,),
                     Image.asset(
                       'images/pushup.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
-                    Text(
+                    const Text(
                       ' 푸시업',
                       style: TextStyle(
                         color: Colors.black,
@@ -75,25 +75,25 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
                 child: LineChartSample2(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    SizedBox(width: 12,),
+                    const SizedBox(width: 20,),
                     Image.asset(
                       'images/npush.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
-                    Text(
+                    const Text(
                       ' 무릎 푸시업',
                       style: TextStyle(
                         color: Colors.black,
@@ -104,25 +104,25 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
                 child: LineChartSample2(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    SizedBox(width: 12,),
+                    const SizedBox(width: 20,),
                     Image.asset(
                       'images/man.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
-                    Text(
+                    const Text(
                       ' 사이드 크런치',
                       style: TextStyle(
                         color: Colors.black,
@@ -133,8 +133,8 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
                 child: LineChartSample2(),
               ),
             ],

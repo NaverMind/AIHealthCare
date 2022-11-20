@@ -64,7 +64,7 @@ class _HomelistState extends State<Homelist> {
   @override
   Widget build(BuildContext context) {
     double fontSizee = 28;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Scaffold(
@@ -78,9 +78,9 @@ class _HomelistState extends State<Homelist> {
           body: ListView(
             padding: const EdgeInsets.all(8),
             children: <Widget>[
-              Container(
+              const SizedBox(
                 height: 50,
-                child: const Center(
+                child: Center(
                     child: Text(
                   '오늘의 운동을 선택해주세요!',
                   style: TextStyle(fontSize: 17),
@@ -93,21 +93,21 @@ class _HomelistState extends State<Homelist> {
               Container(
                 height: 10,
               ),
-              Tile(
+              const Tile(
                 image: 'images/pushup.png',
                 description: '이것은 푸시업이다.',
                 action: '푸시업',),
               Container(
                 height: 10,
               ),
-              Tile(
+              const Tile(
                 image: 'images/npush.png',
                 description: '이것은 무릎 푸시업',
                 action: '무릎 푸시업',),
               Container(
                 height: 10,
               ),
-              Tile(
+              const Tile(
                   image: 'images/man.png',
                   description: '이것은 사이드 크런ㅌ치',
                   action: '사이드 크런치',),
@@ -143,7 +143,7 @@ class Tile extends StatelessWidget {
           ))
         );
       },
-      child: Container(
+      child: SizedBox(
         height: 82,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,7 +159,7 @@ class Tile extends StatelessWidget {
               child: Center(
                 child: Text(
                   action,
-                  style: TextStyle(fontSize: 28),
+                  style: const TextStyle(fontSize: 28),
                 ),
               ),
             ),

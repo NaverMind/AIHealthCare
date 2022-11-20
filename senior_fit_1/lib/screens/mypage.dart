@@ -92,7 +92,7 @@ class _MyPageState extends State<MyPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                   backgroundImage: AssetImage(
                                     'images/default_profile_img.png',
                                   ),
@@ -125,8 +125,8 @@ class _MyPageState extends State<MyPage> {
                             children: [
                               Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
                                     child: Text(
                                       '성별',
                                       style: TextStyle(
@@ -136,7 +136,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   Text(
                                     _sex,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.purple),
                                   ),
@@ -144,8 +144,8 @@ class _MyPageState extends State<MyPage> {
                               ),
                               Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
                                     child: Text(
                                       '나이',
                                       style: TextStyle(
@@ -155,7 +155,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   Text(
                                     '${_birth}세',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.purple),
                                   ),
@@ -163,8 +163,8 @@ class _MyPageState extends State<MyPage> {
                               ),
                               Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
                                     child: Text(
                                       '몸무게',
                                       style: TextStyle(
@@ -174,7 +174,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   Text(
                                     '${_weight}kg',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.purple),
                                   ),
@@ -182,8 +182,8 @@ class _MyPageState extends State<MyPage> {
                               ),
                               Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
                                     child: Text(
                                       '키',
                                       style: TextStyle(
@@ -193,7 +193,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   Text(
                                     '${_height}cm',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.purple),
                                   ),

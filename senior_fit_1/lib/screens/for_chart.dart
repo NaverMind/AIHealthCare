@@ -23,11 +23,19 @@ class _LineChartSample2State extends State<LineChartSample2> {
         AspectRatio(
           aspectRatio: 1.70,
           child: DecoratedBox(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(18),
               ),
-              color: Color(0xffe4def5),
+              color: const Color(0xffe4def5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.7),
+                  spreadRadius: 0,
+                  blurRadius: 2.0,
+                  offset: const Offset(5, 5), // changes position of shadow
+                ),
+              ],
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -187,7 +195,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
             show: true,
             gradient: LinearGradient(
               colors: gradientColors
-                  .map((color) => color.withOpacity(0.3))
+                  .map((color) => color.withOpacity(0))
                   .toList(),
             ),
           ),
@@ -244,7 +252,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border.all(color: const Color(0xffffffff)),
       ),
       minX: 0,
       maxX: 11,

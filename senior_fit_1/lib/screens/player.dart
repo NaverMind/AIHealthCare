@@ -12,8 +12,8 @@ class Player extends StatefulWidget {
 }
 
 class PlayerState extends State<Player> {
-  String _videoID;
-  String _videoTitle;
+  final String _videoID;
+  final String _videoTitle;
 
   PlayerState(this._videoID, this._videoTitle);
 
@@ -40,8 +40,8 @@ class PlayerState extends State<Player> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '$_videoTitle',
-          style: TextStyle(fontSize: 20.0),
+          _videoTitle,
+          style: const TextStyle(fontSize: 20.0),
         ),
       ),
       body: YoutubePlayer(

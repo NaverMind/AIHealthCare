@@ -66,8 +66,8 @@ class _DetectPageState extends State<DetectPage> {
 
     // To avoid a memory leak issue.
     // https://github.com/flutter/flutter/issues/60160
-    PaintingBinding.instance?.imageCache?.clear();
-    PaintingBinding.instance?.imageCache?.clearLiveImages();
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
     print('☠️ log: _handleCameraImage');
 
     final image = Image.memory(

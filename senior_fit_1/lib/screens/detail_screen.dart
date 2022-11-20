@@ -38,7 +38,7 @@ class DetailScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   '운동종목',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class DetailScreen extends StatelessWidget {
                 ),
                 Text(
                   action,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                   ),
@@ -56,7 +56,7 @@ class DetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(4, 2, 0, 30),
                   child: Text(
                     description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 14,
                     ),
@@ -117,7 +117,7 @@ class Tile extends StatelessWidget {
       onPressed: () {
         if (isCamera) {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => DetectPage()));
+              .push(MaterialPageRoute(builder: (context) => const DetectPage()));
         } else {
           Navigator.push(
               context,
@@ -145,14 +145,14 @@ class Tile extends StatelessWidget {
                 children: [
                   Text(
                     action,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: Colors.black54,

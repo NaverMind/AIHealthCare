@@ -54,7 +54,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           // 이름
-          titleWidget: Text(
+          titleWidget: const Text(
             '이름을 입력해주세요.',
             style: TextStyle(
               fontSize: 30,
@@ -62,7 +62,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ),
           ),
           bodyWidget: cmpName
-              ? Text(
+              ? const Text(
                   '입력완료',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     });
                   },
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     labelText: strName,
                   ),
                 ),
@@ -100,7 +100,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           //성별
-          titleWidget: Text(
+          titleWidget: const Text(
             '성별을 선택해주세요.',
             style: TextStyle(
               fontSize: 30,
@@ -108,7 +108,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ),
           ),
           bodyWidget: cmpSex
-              ? Text(
+              ? const Text(
             '입력완료',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -126,7 +126,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               labelText: strSex,
             ),
           ),
@@ -145,7 +145,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           // 나이
-          titleWidget: Text(
+          titleWidget: const Text(
             '나이를 입력해주세요.',
             style: TextStyle(
               fontSize: 30,
@@ -153,7 +153,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ),
           ),
           bodyWidget: cmpBirth
-              ? Text(
+              ? const Text(
             '입력완료',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -171,7 +171,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               labelText: strBirth,
             ),
           ),
@@ -190,7 +190,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           // 키
-          titleWidget: Text(
+          titleWidget: const Text(
             '키를 입력해주세요.(cm)',
             style: TextStyle(
               fontSize: 30,
@@ -198,7 +198,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ),
           ),
           bodyWidget: cmpHeight
-              ? Text(
+              ? const Text(
             '입력완료',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -216,7 +216,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               labelText: strHeigth,
             ),
           ),
@@ -235,7 +235,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           // 몸무게
-          titleWidget: Text(
+          titleWidget: const Text(
             '몸무게를 입력해주세요.(kg)',
             style: TextStyle(
               fontSize: 30,
@@ -243,7 +243,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ),
           ),
           bodyWidget: cmpWeight
-              ? Text(
+              ? const Text(
             '입력완료',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -261,7 +261,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               labelText: strWeigth,
             ),
           ),
@@ -283,7 +283,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       onDone: () {
         prefs.setBool('visited', true);
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MyHomePage()));
+            MaterialPageRoute(builder: (context) => const MyHomePage()));
       },
       next: const Icon(
         Icons.arrow_forward,
@@ -307,7 +307,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
 
   PageDecoration getPageDecoration() {
-    return PageDecoration(
+    return const PageDecoration(
       titleTextStyle: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
