@@ -1,6 +1,3 @@
-import 'dart:html';
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:math';
 import 'package:body_detection/models/image_result.dart';
 import 'package:body_detection/models/pose.dart';
@@ -30,8 +27,8 @@ class _DetectPageState extends State<DetectPage> {
   int currentMilliSecondsCompleteImage = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsPostTemp = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
-  late int infTime;
-  late int dectTime;
+  int infTime= DateTime.now().millisecondsSinceEpoch;
+  int dectTime= DateTime.now().millisecondsSinceEpoch;
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
@@ -246,7 +243,7 @@ class _DetectPageState extends State<DetectPage> {
       print(part.type);
       print(
           '좌표 : X:${part.position.x} Y:${part.position.y} Z:${part.position.z}');
-      keyPoints[part.type] = [part.position.x, part.position.y];
+      keyPoints[part.type.toString()] = [part.position.x, part.position.y];
     }
 
     keyPoints['PoseLandmarkType.midShoulder'] = [
@@ -287,8 +284,9 @@ class _DetectPageState extends State<DetectPage> {
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
 
     setState(() {
-      infTime = currentMilliSecondsCompletePose -currentMilliSecondsCompleteImage;
-      dectTime = currentMilliSecondsCompletePose -currentMilliSecondsPostTemp;
+      infTime =
+          currentMilliSecondsCompletePose - currentMilliSecondsCompleteImage;
+      dectTime = currentMilliSecondsCompletePose - currentMilliSecondsPostTemp;
       currentMilliSecondsPostTemp = currentMilliSecondsCompletePose;
       print('💡 InfTime: $infTime');
       _detectedPose = pose;
@@ -323,28 +321,38 @@ class _DetectPageState extends State<DetectPage> {
                   style: TextStyle(color: Colors.deepPurple, fontSize: 25),
                 ),
               ),
+              OutlinedButton(
+                onPressed: () {},
+                child: Text(
+                  'DectTime: $dectTime',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () {},
+                child: Text(
+                  'IO Time: ${dectTime - infTime}',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () {},
+                child: Text(
+                  'DectTime: $dectTime',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () {},
+                child: Text(
+                  'IO Time: ${dectTime - infTime}',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                ),
+              ),
             ],
           ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('DectTime: $dectTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('IO Time: ${dectTime-infTime}',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('DectTime: $dectTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('IO Time: ${dectTime-infTime}',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   @override
   void initState() {
