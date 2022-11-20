@@ -46,7 +46,10 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              LineChartSample2(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LineChartSample2(),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -72,7 +75,10 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              LineChartSample2(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LineChartSample2(),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -98,7 +104,10 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              LineChartSample2(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LineChartSample2(),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -124,7 +133,10 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              LineChartSample2(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LineChartSample2(),
+              ),
             ],
           ),
         ),
