@@ -219,7 +219,7 @@ class _DetectPageState extends State<DetectPage> {
     "right_body_knee": "오른쪽 무릎을 조금 더 측면으로 옮겨주세요!",
     "left_elbow": "왼손을 머리뒤에 위치해주세요!",
     "right_elbow": "오른손을 머리뒤에 위치해주세요!"
-  }
+  };
   makeAngleList(keyPoints) {
     Map<String, List<double>> result = {};
     for (String i in sideCrunch.keys) {
