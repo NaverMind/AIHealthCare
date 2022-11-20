@@ -43,6 +43,7 @@ class _DetectPageState extends State<DetectPage> {
         onFrameAvailable: _handleCameraImage,
         onPoseAvailable: (pose) {
           _handlePose(pose);
+
         },
       );
     }
@@ -86,7 +87,7 @@ class _DetectPageState extends State<DetectPage> {
     });
   }
 
-  img_resize(pose_vector, real_width, real_height) {
+  imgResize(pose_vector, real_width, real_height) {
     pose_vector = pose_vector.reshape(-1, 1);
     int x_max = 0;
     int y_max = 0;
@@ -173,7 +174,7 @@ class _DetectPageState extends State<DetectPage> {
       return deg.abs();
   }
 
-  final Map<String, List<String>> side_crunch = {
+  final Map<String, List<String>> sideCrunch = {
     "spine": [
       'PoseLandmarkType.midShoulder',
       "PoseLandmarkType.back",
@@ -210,33 +211,41 @@ class _DetectPageState extends State<DetectPage> {
       "PoseLandmarkType.rightShoulder"
     ],
   };
-
-  make_angle_list(keyPoints) {
+  final Map<String, String> sideCrunchCommand = {
+    "spine": "척추를 좀 더 펴주세요!",
+    "left_knee_elbow": "왼쪽 팔꿈치와 무릎을 더 붙이세요!",
+    "right_knee_elbow": "오른쪽 팔꿈치와 무릎을 더 붙이세요!",
+    "left_body_knee": "왼쪽 무릎을 조금 더 측면으로 옮겨주세요!",
+    "right_body_knee": "오른쪽 무릎을 조금 더 측면으로 옮겨주세요!",
+    "left_elbow": "왼손을 머리뒤에 위치해주세요!",
+    "right_elbow": "오른손을 머리뒤에 위치해주세요!"
+  }
+  makeAngleList(keyPoints) {
     Map<String, List<double>> result = {};
-    for (String i in side_crunch.keys) {
-      result[i] = get_angle(keyPoints[side_crunch[i]![0]],
-          keyPoints[side_crunch[i]![1]], keyPoints[side_crunch[i]![2]]);
+    for (String i in sideCrunch.keys) {
+      result[i] = get_angle(keyPoints[sideCrunch[i]![0]],
+          keyPoints[sideCrunch[i]![1]], keyPoints[sideCrunch[i]![2]]);
     }
     return result;
   }
 
-  make_point_list(keyPoints) {
-    List<List<double>> point_list = [];
-    for (String i in side_crunch.keys) {
+  makePointList(keyPoints) {
+    List<List<double>> pointList = [];
+    for (String i in sideCrunch.keys) {
       List<double> tmp = [];
-      for (String j in side_crunch[i]!) {
+      for (String j in sideCrunch[i]!) {
         tmp.add(keyPoints[j][0]);
         tmp.add(keyPoints[j][1]);
       }
-      point_list.add(tmp);
+      pointList.add(tmp);
     }
     // 일단 200, 400으로 잡음
-    point_list = img_resize(point_list, 200, 400);
-    point_list = normalization(point_list);
-    return point_list;
+    pointList = imgResize(pointList, 200, 400);
+    pointList = normalization(pointList);
+    return pointList;
   }
 
-  void _handlePose(Pose? pose) {
+  _handlePose(Pose? pose) {
     // Ignore if navigated out of the page.
     if (!mounted) return;
     print('☠️ log: _handlePose');
@@ -274,14 +283,25 @@ class _DetectPageState extends State<DetectPage> {
           2)
     ];
 
+    Map<String, List<double>> angleList;
+    List<List<double>> pointList;
     ///// 정답 이미지 운동 좌표를 잘 받아왔다고 침 or 여기서는 angle배열이랑 좌표 정규화한 배열 return
     String exercise = '스탠딩 사이드 크런치';
-
     switch (exercise) {
       case '스탠딩 사이드 크런치':
-        Map<String, List<double>> angle_list = make_angle_list(keyPoints);
-        List<List<double>> point_list = make_point_list(keyPoints);
+        angleList = makeAngleList(keyPoints);
+        pointList = makePointList(keyPoints);
         break;
+    }
+
+    // 이미지 코드 받아왔다고 치자
+    // Map<String, List<double>> answerAngleList;
+    // List<List<double>> answerPointList;
+    int idx = 0;
+    for (var i in keyPoints.keys){
+      double score = ((180 - angleList[i]).abs() / 180) * 0.5 + weightedDistanceMatching(pointList[idx++], [1,1,1,1,1,1]) * 0.5;
+      double threshold = 0.5;
+      if (score > threshold) print(sideCrunchCommand[i]);
     }
 
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
