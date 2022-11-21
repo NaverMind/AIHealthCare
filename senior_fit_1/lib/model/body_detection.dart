@@ -6,10 +6,8 @@ import 'package:body_detection/png_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-
 import 'package:body_detection/body_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'pose_mask_painter.dart';
 
 class DetectPage extends StatefulWidget {
