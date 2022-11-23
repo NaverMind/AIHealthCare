@@ -117,7 +117,7 @@ class Tile extends StatelessWidget {
       onPressed: () {
         if (isCamera) {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const DetectPage()));
+              .push(MaterialPageRoute(builder: (context) => DetectPage(actionname: actionname,)));
         } else {
           Navigator.push(
               context,

@@ -11,7 +11,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'pose_mask_painter.dart';
 
 class DetectPage extends StatefulWidget {
-  const DetectPage({Key? key}) : super(key: key);
+  final String actionname;
+
+  DetectPage({
+    Key? key,
+    required this.actionname,
+  }) : super(key: key);
 
   @override
   State<DetectPage> createState() => _DetectPageState();
@@ -25,8 +30,9 @@ class _DetectPageState extends State<DetectPage> {
   int currentMilliSecondsCompleteImage = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsPostTemp = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
-  int infTime= DateTime.now().millisecondsSinceEpoch;
-  int dectTime= DateTime.now().millisecondsSinceEpoch;
+  int infTime = DateTime.now().millisecondsSinceEpoch;
+  int dectTime = DateTime.now().millisecondsSinceEpoch;
+  bool isInCamera = false;
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
@@ -87,6 +93,28 @@ class _DetectPageState extends State<DetectPage> {
     print('☠️ log: _handlePose');
     // 여기 pose 좌표 있음
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
+    if (pose != null) {
+      isInCamera = true;
+      for (final part in pose!.landmarks) {
+        if (part.position.x < 0 ||
+            part.position.x > _imageSize.width ||
+            part.position.y < 0 ||
+            part.position.y > _imageSize.height) {
+          setState(() {
+            isInCamera = false;
+          });
+        }
+      }
+      if (isInCamera) {
+        setState(() {
+          isInCamera = true;
+        });
+      }
+    } else {
+      setState(() {
+        isInCamera = false;
+      });
+    }
 
     setState(() {
       infTime =
@@ -98,65 +126,99 @@ class _DetectPageState extends State<DetectPage> {
     });
   }
 
-
-  Widget get _cameraDetectionView => SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              ClipRect(
-                child: CustomPaint(
-                  child: _cameraImage,
-                  foregroundPainter: PoseMaskPainter(
-                    pose: _detectedPose,
-                    mask: _maskImage,
-                    imageSize: _imageSize,
-                  ),
+  Widget get _cameraDetectionView => Center(
+        child: Stack(
+          children: [
+            ClipRect(
+              child: CustomPaint(
+                child: _cameraImage,
+                foregroundPainter: PoseMaskPainter(
+                  pose: _detectedPose,
+                  mask: _maskImage,
+                  imageSize: _imageSize,
                 ),
               ),
-              OutlinedButton(
+            ),
+            Positioned(
+              left: -70,
+              top: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              right: -70,
+              top: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              left: -70,
+              bottom: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              right: -70,
+              bottom: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned.fill(
+              child: Align(
+                  alignment: Alignment.center,
+                  child: !isInCamera
+                      ? Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xCCffffff),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                            child: Text(
+                              '프레임 안으로\n들어와주세요!',
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red),
+                            ),
+                          ),
+                        )
+                      : null),
+            ),
+            Positioned(
+              right: 20,
+              top: 20,
+              child: IconButton(
                 onPressed: () {
                   _stopCameraStream();
                   Navigator.pop(context);
                 },
-                child: const Text('돌아가기'),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  'InfTime: $infTime',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                icon: const Icon(
+                  Icons.cancel_outlined,
+                  size: 40,
+                  color: Color(0xDDffffff),
                 ),
               ),
-              OutlinedButton(
-                onPressed: () {},
+            ),
+            Positioned(
+              left: 20,
+                top: 10,
                 child: Text(
-                  'DectTime: $dectTime',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  'IO Time: ${dectTime - infTime}',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  'DectTime: $dectTime',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  'IO Time: ${dectTime - infTime}',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-                ),
-              ),
-            ],
-          ),
+              'fps : ${1000 ~/ dectTime}',
+              style: TextStyle(color: Colors.green,fontSize: 20),
+            ))
+          ],
         ),
       );
 
@@ -181,3 +243,39 @@ class _DetectPageState extends State<DetectPage> {
     );
   }
 }
+//
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'InfTime: $infTime',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'DectTime: $dectTime',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'IO Time: ${dectTime - infTime}',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'Img size: ${_imageSize.height} / ${_imageSize.width}',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'Img size: $isInCamera',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
