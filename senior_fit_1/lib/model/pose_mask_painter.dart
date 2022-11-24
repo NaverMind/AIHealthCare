@@ -19,7 +19,7 @@ class PoseMaskPainter extends CustomPainter {
     required this.mask,
     required this.imageSize,
   }) {
-    flutterTts.setLanguage('en');
+    flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
   }
 
@@ -143,16 +143,6 @@ class PoseMaskPainter extends CustomPainter {
 
   }
 
-  void _paintMask(Canvas canvas, Size size) {
-    if (mask == null) return;
-
-    canvas.drawImageRect(
-        mask!,
-        Rect.fromLTWH(0, 0, mask!.width.toDouble(), mask!.height.toDouble()),
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        maskPaint);
-  }
-
   @override
   bool shouldRepaint(PoseMaskPainter oldDelegate) {
     return oldDelegate.pose != pose ||
@@ -225,7 +215,7 @@ class PoseMaskPainter extends CustomPainter {
     if (list[0] > 70 && list[0] < 100 && upPosition == true) {
       downPosition = true;
       upPosition = false;
-      flutterTts.speak('Up');
+      flutterTts.speak('올려');
     }
   }
 
@@ -233,7 +223,7 @@ class PoseMaskPainter extends CustomPainter {
     if (list[0] > 170 && list[0] < 180) {
       if (downPosition == true) {
         reps = reps + 1;
-        flutterTts.speak('Down');
+        flutterTts.speak('내려');
       }
       downPosition = false;
       upPosition = true;

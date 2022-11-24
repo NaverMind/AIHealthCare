@@ -1,14 +1,14 @@
-import 'dart:math';
+import 'dart:async';
+
 import 'package:body_detection/models/image_result.dart';
 import 'package:body_detection/models/pose.dart';
-import 'package:body_detection/models/body_mask.dart';
-import 'package:body_detection/png_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:body_detection/body_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'pose_mask_painter.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 
 class DetectPage extends StatefulWidget {
   final String actionname;
@@ -33,6 +33,35 @@ class _DetectPageState extends State<DetectPage> {
   int infTime = DateTime.now().millisecondsSinceEpoch;
   int dectTime = DateTime.now().millisecondsSinceEpoch;
   bool isInCamera = false;
+  int isInCameraCnt = 0;
+  final FlutterTts flutterTts = FlutterTts();
+  late Stream<int> timerStream;
+  late StreamSubscription timerStreamSubscription;
+  bool isActiveStart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCameraStream();
+    print('☠️ log: initState');
+    flutterTts.setLanguage('ko');
+    flutterTts.setSpeechRate(0.4);
+    timerStream = _startTimerStream();
+    int cntTemp = 0;
+    timerStreamSubscription = timerStream.listen((event) {
+      if (isActiveStart) {
+        if(cntTemp < 3) {
+          FlutterBeep.beep(false);
+          cntTemp++;
+        } else{
+          FlutterBeep.beep(true);
+          cntTemp =0;
+        }
+
+      }
+    });
+  }
+
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
@@ -43,6 +72,7 @@ class _DetectPageState extends State<DetectPage> {
       await BodyDetection.startCameraStream(
         onFrameAvailable: _handleCameraImage,
         onPoseAvailable: (pose) {
+          print('onposeAvailable');
           _handlePose(pose);
         },
       );
@@ -52,6 +82,19 @@ class _DetectPageState extends State<DetectPage> {
       _detectedPose = null;
       print('☠️ log: _detectedPose = null');
     });
+  }
+
+  Stream<int> _startTimerStream() async* {
+    int sec = 0;
+    while (true) {
+      yield sec;
+      sec++;
+
+      print('👋👋👋👋👋');
+      await Future.delayed(const Duration(
+        seconds: 1,
+      ));
+    }
   }
 
   Future<void> _stopCameraStream() async {
@@ -102,17 +145,24 @@ class _DetectPageState extends State<DetectPage> {
             part.position.y > _imageSize.height) {
           setState(() {
             isInCamera = false;
+            isInCameraCnt = 0;
           });
         }
       }
       if (isInCamera) {
         setState(() {
           isInCamera = true;
+          isInCameraCnt++;
+          if (isInCameraCnt > 99) {
+            isActiveStart = true;
+          }
+          ;
         });
       }
-    } else {
+    }else {
       setState(() {
         isInCamera = false;
+        isInCameraCnt = 0;
       });
     }
 
@@ -175,7 +225,7 @@ class _DetectPageState extends State<DetectPage> {
                 color: isInCamera ? Colors.green : Colors.red,
               ),
             ),
-            Positioned.fill(
+            !isActiveStart? Positioned.fill(
               child: Align(
                   alignment: Alignment.center,
                   child: !isInCamera
@@ -194,8 +244,39 @@ class _DetectPageState extends State<DetectPage> {
                             ),
                           ),
                         )
-                      : null),
-            ),
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xCCffffff),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          height: 80,
+                          child: Column(
+                            children: [
+                              Text(
+                                '100% 가 될때까지',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                '화면 밖으로 벗어나지 마세요',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                '$isInCameraCnt %',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+            ) : Positioned(child: Text('운동 시작')),
             Positioned(
               right: 20,
               top: 20,
@@ -212,28 +293,23 @@ class _DetectPageState extends State<DetectPage> {
               ),
             ),
             Positioned(
-              left: 20,
+                left: 20,
                 top: 10,
                 child: Text(
-              'fps : ${1000 ~/ dectTime}',
-              style: TextStyle(color: Colors.green,fontSize: 20),
-            ))
+                  'fps : ${1000 ~/ dectTime}',
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ))
           ],
         ),
       );
 
-  @override
-  void initState() {
-    super.initState();
-    _startCameraStream();
-    print('☠️ log: initState');
-  }
 
   @override
   void dispose() {
     super.dispose();
     _stopCameraStream();
     print('☠️ log: dispose');
+    timerStreamSubscription.cancel();
   }
 
   @override
