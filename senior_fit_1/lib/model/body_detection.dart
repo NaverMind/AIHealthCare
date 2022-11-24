@@ -35,7 +35,7 @@ class _DetectPageState extends State<DetectPage> {
   bool isInCamera = false;
   int isInCameraCnt = 0;
   final FlutterTts flutterTts = FlutterTts();
-  late Stream<int> timerStream;
+  late Stream<bool> timerStream;
   late StreamSubscription timerStreamSubscription;
   bool isActiveStart = false;
 
@@ -47,7 +47,13 @@ class _DetectPageState extends State<DetectPage> {
     flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
     timerStream = _startTimerStream();
-    timerStreamSubscription = timerStream.listen((event) {});
+    timerStreamSubscription = timerStream.listen((event) {
+      if(event){
+        FlutterBeep.beep(true);
+      }else{
+        FlutterBeep.beep(false);
+      }
+    });
   }
 
 
@@ -72,7 +78,7 @@ class _DetectPageState extends State<DetectPage> {
     });
   }
 
-  Stream<int> _startTimerStream() async* {
+  Stream<bool> _startTimerStream() async* {
     while (true) {
       if (isActiveStart) {
         break;
@@ -83,28 +89,24 @@ class _DetectPageState extends State<DetectPage> {
     }
 
     await flutterTts.speak('3초뒤 운동을 시작합니다');
-    await flutterTts.speak('3');
-    await Future.delayed(const Duration(
-      seconds: 1,
-    ));
-    await flutterTts.speak('2');
-    await Future.delayed(const Duration(
-      seconds: 1,
-    ));
-    await flutterTts.speak('1');
-    await Future.delayed(const Duration(
-      seconds: 1,
-    ));
-    await flutterTts.speak('시작');
+    await Future.delayed(const Duration(seconds: 3));
+    flutterTts.speak('3');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    flutterTts.speak('2');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    flutterTts.speak('1');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    flutterTts.speak('시작');
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     int cntTemp = 0;
     while(true){
       if(cntTemp < 3) {
-        FlutterBeep.beep(false);
         cntTemp++;
+        yield false;
       } else{
-        FlutterBeep.beep(true);
         cntTemp =0;
+        yield true;
       }
       await Future.delayed(const Duration(
         seconds: 1,
@@ -167,7 +169,7 @@ class _DetectPageState extends State<DetectPage> {
       if (isInCamera) {
         setState(() {
           isInCamera = true;
-          isInCameraCnt++;
+          isInCameraCnt+=2;
           if (isInCameraCnt > 99) {
             isActiveStart = true;
           }
