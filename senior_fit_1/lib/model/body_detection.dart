@@ -47,19 +47,7 @@ class _DetectPageState extends State<DetectPage> {
     flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
     timerStream = _startTimerStream();
-    int cntTemp = 0;
-    timerStreamSubscription = timerStream.listen((event) {
-      if (isActiveStart) {
-        if(cntTemp < 3) {
-          FlutterBeep.beep(false);
-          cntTemp++;
-        } else{
-          FlutterBeep.beep(true);
-          cntTemp =0;
-        }
-
-      }
-    });
+    timerStreamSubscription = timerStream.listen((event) {});
   }
 
 
@@ -85,12 +73,39 @@ class _DetectPageState extends State<DetectPage> {
   }
 
   Stream<int> _startTimerStream() async* {
-    int sec = 0;
     while (true) {
-      yield sec;
-      sec++;
+      if (isActiveStart) {
+        break;
+      }
+      await Future.delayed(const Duration(
+        seconds: 1,
+      ));
+    }
 
-      print('👋👋👋👋👋');
+    await flutterTts.speak('3초뒤 운동을 시작합니다');
+    await flutterTts.speak('3');
+    await Future.delayed(const Duration(
+      seconds: 1,
+    ));
+    await flutterTts.speak('2');
+    await Future.delayed(const Duration(
+      seconds: 1,
+    ));
+    await flutterTts.speak('1');
+    await Future.delayed(const Duration(
+      seconds: 1,
+    ));
+    await flutterTts.speak('시작');
+
+    int cntTemp = 0;
+    while(true){
+      if(cntTemp < 3) {
+        FlutterBeep.beep(false);
+        cntTemp++;
+      } else{
+        FlutterBeep.beep(true);
+        cntTemp =0;
+      }
       await Future.delayed(const Duration(
         seconds: 1,
       ));
