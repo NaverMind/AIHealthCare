@@ -7,6 +7,7 @@ import 'package:senior_fit_1/screens/home_list.dart';
 import 'package:senior_fit_1/screens/note.dart';
 import 'package:senior_fit_1/screens/mypage.dart';
 // App에 넣음
+// ch-appui test
 late SharedPreferences prefs;
 
 void main() async {
