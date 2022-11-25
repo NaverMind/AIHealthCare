@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:body_detection/body_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:senior_fit_1/model/standing_side_crunch.dart';
 import 'pose_mask_painter.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_beep/flutter_beep.dart';
+import 'package:senior_fit_1/model/bird_dog.dart';
 
 class DetectPage extends StatefulWidget {
   final String actionname;
@@ -38,35 +40,41 @@ class _DetectPageState extends State<DetectPage> {
   late Stream<bool> timerStream;
   late StreamSubscription timerStreamSubscription;
   bool isActiveStart = false;
+  bool isInFeedbackTime = false;
 
   @override
   void initState() {
     super.initState();
     _startCameraStream();
-    print('☠️ log: initState');
+    // print('☠️ log: initState');
     flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
     timerStream = _startTimerStream();
     timerStreamSubscription = timerStream.listen((event) {
-      if(event){
+      if (event) {
         FlutterBeep.beep(true);
-      }else{
+        setState(() {
+          isInFeedbackTime = true;
+        });
+      } else {
         FlutterBeep.beep(false);
+        setState(() {
+          isInFeedbackTime = false;
+        });
       }
     });
   }
-
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
 
     if (request.isGranted) {
       await BodyDetection.enablePoseDetection();
-      print('☠️ enable~startCameraStream');
+      // print('☠️ enable~startCameraStream');
       await BodyDetection.startCameraStream(
         onFrameAvailable: _handleCameraImage,
         onPoseAvailable: (pose) {
-          print('onposeAvailable');
+          // print('onposeAvailable');
           _handlePose(pose);
         },
       );
@@ -74,7 +82,7 @@ class _DetectPageState extends State<DetectPage> {
 
     setState(() {
       _detectedPose = null;
-      print('☠️ log: _detectedPose = null');
+      // print('☠️ log: _detectedPose = null');
     });
   }
 
@@ -90,23 +98,33 @@ class _DetectPageState extends State<DetectPage> {
 
     await flutterTts.speak('3초뒤 운동을 시작합니다');
     await Future.delayed(const Duration(seconds: 3));
-    flutterTts.speak('3');
+    await flutterTts.speak('3');
     await Future.delayed(const Duration(milliseconds: 1000));
-    flutterTts.speak('2');
+    await flutterTts.speak('2');
     await Future.delayed(const Duration(milliseconds: 1000));
-    flutterTts.speak('1');
+    await flutterTts.speak('1');
     await Future.delayed(const Duration(milliseconds: 1000));
-    flutterTts.speak('시작');
+    await flutterTts.speak('시작');
     await Future.delayed(const Duration(milliseconds: 1000));
 
     int cntTemp = 0;
-    while(true){
-      if(cntTemp < 3) {
+    while (true) {
+      if (cntTemp < 3) {
         cntTemp++;
         yield false;
-      } else{
-        cntTemp =0;
+      } else {
+        cntTemp = 0;
         yield true;
+        // if (_detectedPose != null) {
+        //   if (widget.actionname == 'standing side crunch') {
+        //     exercisee.SSCScore(_detectedPose!);
+        //     await flutterTts.speak(exercisee.chooseOne()!);
+        //   } else if (widget.actionname == 'bird dog') {
+        //     exercisee.BDScore(_detectedPose!);
+        //     await flutterTts.speak(exercisee.chooseOne()!);
+        //   }
+        //   exercisee.del();
+        // }
       }
       await Future.delayed(const Duration(
         seconds: 1,
@@ -120,7 +138,7 @@ class _DetectPageState extends State<DetectPage> {
     setState(() {
       _cameraImage = null;
       _imageSize = Size.zero;
-      print('☠️ log: _stopCameraStream');
+      // print('☠️ log: _stopCameraStream');
     });
   }
 
@@ -132,7 +150,7 @@ class _DetectPageState extends State<DetectPage> {
     // https://github.com/flutter/flutter/issues/60160
     PaintingBinding.instance.imageCache.clear();
     PaintingBinding.instance.imageCache.clearLiveImages();
-    print('☠️ log: _handleCameraImage');
+    // print('☠️ log: _handleCameraImage');
 
     final image = Image.memory(
       result.bytes,
@@ -150,7 +168,7 @@ class _DetectPageState extends State<DetectPage> {
   void _handlePose(Pose? pose) {
     // Ignore if navigated out of the page.
     if (!mounted) return;
-    print('☠️ log: _handlePose');
+    // print('☠️ log: _handlePose');
     // 여기 pose 좌표 있음
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
     if (pose != null) {
@@ -169,14 +187,13 @@ class _DetectPageState extends State<DetectPage> {
       if (isInCamera) {
         setState(() {
           isInCamera = true;
-          isInCameraCnt+=2;
+          isInCameraCnt += 2;
           if (isInCameraCnt > 99) {
             isActiveStart = true;
           }
-          ;
         });
       }
-    }else {
+    } else {
       setState(() {
         isInCamera = false;
         isInCameraCnt = 0;
@@ -188,7 +205,7 @@ class _DetectPageState extends State<DetectPage> {
           currentMilliSecondsCompletePose - currentMilliSecondsCompleteImage;
       dectTime = currentMilliSecondsCompletePose - currentMilliSecondsPostTemp;
       currentMilliSecondsPostTemp = currentMilliSecondsCompletePose;
-      print('💡 InfTime: $infTime');
+      // print('💡 InfTime: $infTime');
       _detectedPose = pose;
     });
   }
@@ -199,11 +216,22 @@ class _DetectPageState extends State<DetectPage> {
             ClipRect(
               child: CustomPaint(
                 child: _cameraImage,
-                foregroundPainter: PoseMaskPainter(
-                  pose: _detectedPose,
-                  mask: _maskImage,
-                  imageSize: _imageSize,
-                ),
+                foregroundPainter: !isInFeedbackTime
+                    ? PoseMaskPainter(
+                        pose: _detectedPose,
+                        mask: _maskImage,
+                        imageSize: _imageSize,
+                      )
+                    : widget.actionname == '사이드 크런치'
+                        ? StandingSideCrunchPainter(
+                            pose: _detectedPose,
+                            mask: _maskImage,
+                            imageSize: _imageSize,
+                          )
+                        : BirdDogPainter(
+                            pose: _detectedPose,
+                            mask: _maskImage,
+                            imageSize: _imageSize),
               ),
             ),
             Positioned(
@@ -242,58 +270,61 @@ class _DetectPageState extends State<DetectPage> {
                 color: isInCamera ? Colors.green : Colors.red,
               ),
             ),
-            !isActiveStart? Positioned.fill(
-              child: Align(
-                  alignment: Alignment.center,
-                  child: !isInCamera
-                      ? Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xCCffffff),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                            child: Text(
-                              '프레임 안으로\n들어와주세요!',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xCCffffff),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          height: 80,
-                          child: Column(
-                            children: [
-                              Text(
-                                '100% 가 될때까지',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
+            !isActiveStart
+                ? Positioned.fill(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: !isInCamera
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    color: Color(0xCCffffff),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                  child: Text(
+                                    '프레임 안으로\n들어와주세요!',
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '화면 밖으로 벗어나지 마세요',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xCCffffff),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              ),
-                              Text(
-                                '$isInCameraCnt %',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '100% 가 될때까지',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '화면 밖으로 벗어나지 마세요',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$isInCameraCnt %',
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        )),
-            ) : Positioned(child: Text('운동 시작')),
+                              )),
+                  )
+                : Positioned(child: Text('운동 시작')),
             Positioned(
               right: 20,
               top: 20,
@@ -320,12 +351,11 @@ class _DetectPageState extends State<DetectPage> {
         ),
       );
 
-
   @override
   void dispose() {
     super.dispose();
     _stopCameraStream();
-    print('☠️ log: dispose');
+    // print('☠️ log: dispose');
     timerStreamSubscription.cancel();
   }
 

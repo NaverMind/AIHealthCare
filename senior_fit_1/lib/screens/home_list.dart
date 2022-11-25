@@ -87,9 +87,16 @@ class _HomelistState extends State<Homelist> {
                 )),
               ),
               const Tile(
-                image: 'images/plank.png',
-                description: '가능한 최대 시간 동안 팔굽혀펴기와 비슷한 자세를 유지하는 것을 수반하는 등척성 체간근 근력 운동',
-                action: '플랭크',),
+                image: 'images/man.png',
+                description: '이것은 사이드 크런치',
+                action: '사이드 크런치',),
+              Container(
+                height: 10,
+              ),
+              const Tile(
+                image: 'images/npush.png',
+                description: '이것은 버드독',
+                action: '버드독',),
               Container(
                 height: 10,
               ),
@@ -101,16 +108,10 @@ class _HomelistState extends State<Homelist> {
                 height: 10,
               ),
               const Tile(
-                image: 'images/npush.png',
-                description: '이것은 무릎 푸시업',
-                action: '무릎 푸시업',),
-              Container(
-                height: 10,
-              ),
-              const Tile(
-                  image: 'images/man.png',
-                  description: '이것은 사이드 크런ㅌ치',
-                  action: '사이드 크런치',),
+                image: 'images/plank.png',
+                description: '가능한 최대 시간 동안 팔굽혀펴기와 비슷한 자세를 유지하는 것을 수반하는 등척성 체간근 근력 운동',
+                action: '플랭크',),
+
             ],
           )),
     );
