@@ -48,6 +48,7 @@ dependencies:
   body_detection: ^0.0.3
   image_picker: ^0.8.6
   fl_chart: ^0.55.2
+  flutter_beep: ^1.0.0
 
 dev_dependencies:
   flutter_test:

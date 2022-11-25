@@ -11,7 +11,7 @@ class DetailScreen extends StatelessWidget {
   var imagee = {
     '플랭크': 'images/plank_detail.png',
     '푸시업': 'images/pushup.jpg',
-    '무릎 푸시업': 'images/kneepushup.jpg',
+    '버드독': 'images/kneepushup.jpg',
     '사이드 크런치': 'images/standingside.png'
   };
 
@@ -96,7 +96,7 @@ class Tile extends StatelessWidget {
   var youtubelink = {
     '플랭크': 'VPZvWMXNfwk',
     '푸시업': '_m31z7To0Ko',
-    '무릎 푸시업': '_m31z7To0Ko',
+    '버드독': '_m31z7To0Ko',
     '사이드 크런치': 'GjaYv6vaqu8'
   };
 
