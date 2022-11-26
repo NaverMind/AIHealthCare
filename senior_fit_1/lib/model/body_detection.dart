@@ -49,6 +49,7 @@ class _DetectPageState extends State<DetectPage> {
   _loadPrefs() async {
     prefs = await SharedPreferences.getInstance();
     prefs.setString('feedback', '');
+    prefs.setString('part', '');
     prefs.setDouble('score', 0.0);
   }
   @override
@@ -125,10 +126,12 @@ class _DetectPageState extends State<DetectPage> {
       if (cntTemp < 3) {
         String? feedbackStr = prefs.getString('feedback');
         if (feedbackStr != '') {
-          flutterTts.speak(feedbackStr!);
+          await flutterTts.speak(feedbackStr!);
           // TODO: db에 저장 필요.
-          prefs.setString('feedback', '');
-          prefs.setDouble('score', 0.0);
+          // activename, score(prefs), feedback(prefs), 부위(prefs)
+          await prefs.setString('feedback', '');
+          await prefs.setString('part', '');
+          await prefs.setDouble('score', 0.0);
         }
         cntTemp++;
         yield false;

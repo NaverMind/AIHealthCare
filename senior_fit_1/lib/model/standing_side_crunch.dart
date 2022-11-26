@@ -49,11 +49,13 @@ class StandingSideCrunchPainter extends CustomPainter {
 
 
   /// 저장할 값 parameter에 넣어준다.
-  Future<void> getMax(double score, String feedback) async {
+  Future<void> getMax(double score, String feedback, String part) async {
+    // SharedPreferences = 앱 전체에서 사용가능
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if(prefs.getDouble('score')! < score){
       prefs.setDouble('score', score);
       prefs.setString('feedback', feedback);
+      prefs.setString('part', part);
     }
   }
 
