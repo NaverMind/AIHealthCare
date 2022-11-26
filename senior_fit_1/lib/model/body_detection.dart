@@ -71,6 +71,7 @@ class _DetectPageState extends State<DetectPage> {
       } else {
         FlutterBeep.beep(false);
         if(isInFeedbackTime){
+
           setState(() {
             isInFeedbackTime = false;
           });
@@ -128,7 +129,7 @@ class _DetectPageState extends State<DetectPage> {
         if (feedbackStr != '') {
           await flutterTts.speak(feedbackStr!);
           // TODO: db에 저장 필요.
-          // activename, score(prefs), feedback(prefs), 부위(prefs)
+          // activename, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
           await prefs.setString('feedback', '');
           await prefs.setString('part', '');
           await prefs.setDouble('score', 0.0);
@@ -140,7 +141,7 @@ class _DetectPageState extends State<DetectPage> {
         yield true;
       }
       await Future.delayed(const Duration(
-        seconds: 1,
+        milliseconds: 1000,
       ));
     }
   }
