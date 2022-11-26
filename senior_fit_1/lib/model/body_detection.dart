@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 import 'package:body_detection/body_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:senior_fit_1/model/standing_side_crunch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pose_mask_painter.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_beep/flutter_beep.dart';
@@ -25,6 +26,8 @@ class DetectPage extends StatefulWidget {
 }
 
 class _DetectPageState extends State<DetectPage> {
+  late SharedPreferences prefs;
+
   Pose? _detectedPose;
   ui.Image? _maskImage;
   Image? _cameraImage;
@@ -42,9 +45,17 @@ class _DetectPageState extends State<DetectPage> {
   bool isActiveStart = false;
   bool isInFeedbackTime = false;
 
+
+  _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('feedback', '');
+    prefs.setDouble('score', 0.0);
+  }
   @override
   void initState() {
     super.initState();
+    _loadPrefs();
+
     _startCameraStream();
     // print('☠️ log: initState');
     flutterTts.setLanguage('ko');
@@ -58,9 +69,11 @@ class _DetectPageState extends State<DetectPage> {
         });
       } else {
         FlutterBeep.beep(false);
-        setState(() {
-          isInFeedbackTime = false;
-        });
+        if(isInFeedbackTime){
+          setState(() {
+            isInFeedbackTime = false;
+          });
+        }
       }
     });
   }
@@ -110,21 +123,18 @@ class _DetectPageState extends State<DetectPage> {
     int cntTemp = 0;
     while (true) {
       if (cntTemp < 3) {
+        String? feedbackStr = prefs.getString('feedback');
+        if (feedbackStr != '') {
+          flutterTts.speak(feedbackStr!);
+          // TODO: db에 저장 필요.
+          prefs.setString('feedback', '');
+          prefs.setDouble('score', 0.0);
+        }
         cntTemp++;
         yield false;
       } else {
         cntTemp = 0;
         yield true;
-        // if (_detectedPose != null) {
-        //   if (widget.actionname == 'standing side crunch') {
-        //     exercisee.SSCScore(_detectedPose!);
-        //     await flutterTts.speak(exercisee.chooseOne()!);
-        //   } else if (widget.actionname == 'bird dog') {
-        //     exercisee.BDScore(_detectedPose!);
-        //     await flutterTts.speak(exercisee.chooseOne()!);
-        //   }
-        //   exercisee.del();
-        // }
       }
       await Future.delayed(const Duration(
         seconds: 1,

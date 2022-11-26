@@ -6,6 +6,7 @@ import 'package:body_detection/models/pose_landmark.dart';
 import 'package:body_detection/models/pose_landmark_type.dart';
 import 'dart:math';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool downPosition = false;
 bool upPosition = true;
@@ -38,10 +39,22 @@ class StandingSideCrunchPainter extends CustomPainter {
     ..colorFilter = const ColorFilter.mode(
         Color.fromRGBO(0, 0, 255, 0.5), BlendMode.srcOut);
 
+
+
   @override
   void paint(Canvas canvas, Size size) {
     // _paintMask(canvas, size);
     _paintPose(canvas, size);
+  }
+
+
+  /// 저장할 값 parameter에 넣어준다.
+  Future<void> getMax(double score, String feedback) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getDouble('score')! < score){
+      prefs.setDouble('score', score);
+      prefs.setString('feedback', feedback);
+    }
   }
 
   void _paintPose(Canvas canvas, Size size) {

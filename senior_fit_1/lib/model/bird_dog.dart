@@ -6,6 +6,7 @@ import 'package:body_detection/models/pose_landmark.dart';
 import 'package:body_detection/models/pose_landmark_type.dart';
 import 'dart:math';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool downPosition = false;
 bool upPosition = true;
@@ -26,9 +27,11 @@ class BirdDogPainter extends CustomPainter {
   final Pose? pose;
   final ui.Image? mask;
   final Size imageSize;
-  final pointPaint = Paint()..color = const Color.fromRGBO(255, 0, 0, 0.8);
-  final leftPointPaint = Paint()..color = const Color.fromRGBO(
-      223, 80, 80, 1.0);
+  final pointPaint = Paint()
+    ..color = const Color.fromRGBO(255, 0, 0, 0.8);
+  final leftPointPaint = Paint()
+    ..color = const Color.fromRGBO(
+        223, 80, 80, 1.0);
   final rightPointPaint = Paint()
     ..color = const Color.fromRGBO(245, 10, 10, 1.0);
   final linePaint = Paint()
@@ -42,6 +45,15 @@ class BirdDogPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // _paintMask(canvas, size);
     _paintPose(canvas, size);
+  }
+
+  /// 저장할 값 parameter에 넣어준다.
+  Future<void> getMax(double score, String feedback) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getDouble('score')! < score){
+      prefs.setDouble('score', score);
+      prefs.setString('feedback', feedback);
+    }
   }
 
   void _paintPose(Canvas canvas, Size size) {
@@ -71,7 +83,6 @@ class BirdDogPainter extends CustomPainter {
       } else if (part.type.isRightSide) {
         canvas.drawCircle(offsetForPart(part), 3, rightPointPaint);
       }
-
     }
   }
 
@@ -82,42 +93,44 @@ class BirdDogPainter extends CustomPainter {
         oldDelegate.imageSize != imageSize;
   }
 
-  List<List<PoseLandmarkType>> get connections => [
-    [PoseLandmarkType.leftEar, PoseLandmarkType.leftEyeOuter],
-    [PoseLandmarkType.leftEyeOuter, PoseLandmarkType.leftEye],
-    [PoseLandmarkType.leftEye, PoseLandmarkType.leftEyeInner],
-    [PoseLandmarkType.leftEyeInner, PoseLandmarkType.nose],
-    [PoseLandmarkType.nose, PoseLandmarkType.rightEyeInner],
-    [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEye],
-    [PoseLandmarkType.rightEye, PoseLandmarkType.rightEyeOuter],
-    [PoseLandmarkType.rightEyeOuter, PoseLandmarkType.rightEar],
-    [PoseLandmarkType.mouthLeft, PoseLandmarkType.mouthRight],
-    [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-    [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
-    [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
-    [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightElbow],
-    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightThumb],
-    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightIndexFinger],
-    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightPinkyFinger],
-    [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-    [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-    [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-    [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
-    [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-    [PoseLandmarkType.leftElbow, PoseLandmarkType.leftShoulder],
-    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftElbow],
-    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftThumb],
-    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftIndexFinger],
-    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftPinkyFinger],
-    [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftHeel],
-    [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftToe],
-    [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightHeel],
-    [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightToe],
-    [PoseLandmarkType.rightHeel, PoseLandmarkType.rightToe],
-    [PoseLandmarkType.leftHeel, PoseLandmarkType.leftToe],
-    [PoseLandmarkType.rightIndexFinger, PoseLandmarkType.rightPinkyFinger],
-    [PoseLandmarkType.leftIndexFinger, PoseLandmarkType.leftPinkyFinger],
-  ];
+  List<List<PoseLandmarkType>> get connections =>
+      [
+        [PoseLandmarkType.leftEar, PoseLandmarkType.leftEyeOuter],
+        [PoseLandmarkType.leftEyeOuter, PoseLandmarkType.leftEye],
+        [PoseLandmarkType.leftEye, PoseLandmarkType.leftEyeInner],
+        [PoseLandmarkType.leftEyeInner, PoseLandmarkType.nose],
+        [PoseLandmarkType.nose, PoseLandmarkType.rightEyeInner],
+        [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEye],
+        [PoseLandmarkType.rightEye, PoseLandmarkType.rightEyeOuter],
+        [PoseLandmarkType.rightEyeOuter, PoseLandmarkType.rightEar],
+        [PoseLandmarkType.mouthLeft, PoseLandmarkType.mouthRight],
+        [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+        [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
+        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
+        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightElbow],
+        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightThumb],
+        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightIndexFinger],
+        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightPinkyFinger],
+        [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+        [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+        [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+        [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+        [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+        [PoseLandmarkType.leftElbow, PoseLandmarkType.leftShoulder],
+        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftElbow],
+        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftThumb],
+        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftIndexFinger],
+        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftPinkyFinger],
+        [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftHeel],
+        [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftToe],
+        [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightHeel],
+        [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightToe],
+        [PoseLandmarkType.rightHeel, PoseLandmarkType.rightToe],
+        [PoseLandmarkType.leftHeel, PoseLandmarkType.leftToe],
+        [PoseLandmarkType.rightIndexFinger, PoseLandmarkType.rightPinkyFinger],
+        [PoseLandmarkType.leftIndexFinger, PoseLandmarkType.leftPinkyFinger],
+      ];
+
 
 }
