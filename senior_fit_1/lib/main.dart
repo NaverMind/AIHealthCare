@@ -6,13 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fit_1/screens/home_list.dart';
 import 'package:senior_fit_1/screens/note.dart';
 import 'package:senior_fit_1/screens/mypage.dart';
+
+import 'database/drift_database.dart';
 // App에 넣음
 // ch-appui test
 late SharedPreferences prefs;
+late final database;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  database = LocalDatabase();
   prefs = await SharedPreferences.getInstance();
   // await prefs.clear(); // for test
   runApp(const MyApp());

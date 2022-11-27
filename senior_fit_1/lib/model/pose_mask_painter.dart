@@ -45,7 +45,6 @@ class PoseMaskPainter extends CustomPainter {
 
   void _paintPose(Canvas canvas, Size size) {
     if (pose == null) return;
-
     final double hRatio =
     imageSize.width == 0 ? 1 : size.width / imageSize.width;
     final double vRatio =

@@ -2,15 +2,20 @@ import 'dart:async';
 
 import 'package:body_detection/models/image_result.dart';
 import 'package:body_detection/models/pose.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:body_detection/body_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:senior_fit_1/database/drift_database.dart';
 import 'package:senior_fit_1/model/standing_side_crunch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pose_mask_painter.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import 'package:senior_fit_1/model/bird_dog.dart';
+
+import 'package:senior_fit_1/main.dart';
 
 class DetectPage extends StatefulWidget {
   final String actionname;
@@ -25,6 +30,8 @@ class DetectPage extends StatefulWidget {
 }
 
 class _DetectPageState extends State<DetectPage> {
+  late SharedPreferences prefs;
+
   Pose? _detectedPose;
   ui.Image? _maskImage;
   Image? _cameraImage;
@@ -42,25 +49,55 @@ class _DetectPageState extends State<DetectPage> {
   bool isActiveStart = false;
   bool isInFeedbackTime = false;
 
+  _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('feedback', '');
+    prefs.setString('part', '');
+    prefs.setDouble('score_sum', 0.0);
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadPrefs();
+
+    DateTime startTime = DateTime.now();
     _startCameraStream();
     // print('☠️ log: initState');
     flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
     timerStream = _startTimerStream();
-    timerStreamSubscription = timerStream.listen((event) {
+    timerStreamSubscription = timerStream.listen((event) async {
       if (event) {
         FlutterBeep.beep(true);
         setState(() {
           isInFeedbackTime = true;
         });
       } else {
+        if (isInFeedbackTime) {
+          String? feedbackStr = prefs.getString('feedback');
+          if (feedbackStr != '') {
+            flutterTts.speak(feedbackStr!);
+            // TODO: db에 저장 필요.
+            // activename, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
+            await database.createFeedbackScore(
+              FeedbackScoresCompanion(
+                activeName: Value(widget.actionname),
+                startTime: Value(startTime),
+                feedback: Value(prefs.getString('feedback')!),
+                part: Value(prefs.getString('part')!),
+                score: Value(prefs.getDouble('score_sum')!.toInt()),
+              ),
+            );
+            prefs.setString('feedback', '');
+            prefs.setString('part', '');
+            prefs.setDouble('score_sum', 0.0);
+          }
+          setState(() {
+            isInFeedbackTime = false;
+          });
+        }
         FlutterBeep.beep(false);
-        setState(() {
-          isInFeedbackTime = false;
-        });
       }
     });
   }
@@ -115,19 +152,9 @@ class _DetectPageState extends State<DetectPage> {
       } else {
         cntTemp = 0;
         yield true;
-        // if (_detectedPose != null) {
-        //   if (widget.actionname == 'standing side crunch') {
-        //     exercisee.SSCScore(_detectedPose!);
-        //     await flutterTts.speak(exercisee.chooseOne()!);
-        //   } else if (widget.actionname == 'bird dog') {
-        //     exercisee.BDScore(_detectedPose!);
-        //     await flutterTts.speak(exercisee.chooseOne()!);
-        //   }
-        //   exercisee.del();
-        // }
       }
       await Future.delayed(const Duration(
-        seconds: 1,
+        milliseconds: 1000,
       ));
     }
   }

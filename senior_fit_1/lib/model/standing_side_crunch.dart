@@ -14,6 +14,7 @@ var reps = 0;
 
 class StandingSideCrunchPainter extends CustomPainter {
   final FlutterTts flutterTts = FlutterTts();
+
   // left와 right를 바꿈
   Map<String, List<double>> answer_side_crunch_right = {
     'PoseLandmarkType.nose': [0.5171129703521729, 0.15899354219436646],
