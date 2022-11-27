@@ -6,6 +6,7 @@ import 'package:body_detection/models/pose_landmark.dart';
 import 'package:body_detection/models/pose_landmark_type.dart';
 import 'dart:math';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool downPosition = false;
 bool upPosition = true;
@@ -553,25 +554,60 @@ class StandingSideCrunchPainter extends CustomPainter {
     print(
         "왼쪽 무릎 각도 : ${angleList['left_body_knee']} // 오른쪽 무릎 각도 : ${angleList['right_body_knee']}");
     print("()()()()()()");
+    List<double> score_list = [];
+    double score_sum = 0.0;
+    //75점을 넘기면 좋은 자세라고 판단.
+    double threshold = 75;
     for (String i in key) {
       // 점수 계산(13주차 ppt 참고)
       print(
           "********************************************************************");
       print(
           '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])}');
+      //100점으로 환산 + 높은 값이 더 좋은 자세
       double score =
-          ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) * 0.5 +
+          ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) * 50 +
               weightedDistanceMatching(pointList[idx], answerPointList[idx]) *
-                  0.5;
-      // threshold는 실험하면서 추후 조정
-      double threshold = 0.5;
+                  50;
+      score = 100 - score;
+
       idx += 2;
       // sideCrunch변수에 운동에 중요한 부위를 순서대로 넣었다고 침.
       // score가 threshold보다 낮으면 피드백 구문 하나 출력 -> 끝내기
       print('Score : $score');
-      if (score > threshold) print(sideCrunchCommand[i]);
+      score_list.add(score);
+      score_sum += score;
     }
+    getMax(score_list, score_sum, threshold, key, sideCrunchCommand);
     print(
         "-------------------------------------------------------------------------------------------------------------------------------------------");
+  }
+
+  /// 저장할 값 parameter에 넣어준다.
+  Future<void> getMax(
+      List<double> score_list,
+      double score_sum,
+      double threshold,
+      List<String> key,
+      Map<String, String> sideCrunchCommand) async {
+    // SharedPreferences = 앱 전체에서 사용가능
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // 현재 프레임 스코어 합산이 이전에 저장된 프레임 스코어 합산보다 클 경우 더 정확한 자세를 취한 프레임이므로 값 갱신.
+    if (prefs.getDouble('score_sum')! < score_sum) {
+      int idx = 0;
+      // 현재 프레임에서 자세가 가장 안좋았던 부위(score의 값이 가장 낮은 부위)를 찾는 중
+      for (int i = 1; i < score_list.length; i++) {
+        if (score_list[idx] > score_list[i]) idx = i;
+      }
+      prefs.setDouble('score_sum', score_sum);
+      prefs.setDouble('score', score_list[idx]);
+      prefs.setString('part', key[idx]);
+      // 스코어가 제일 낮은 값의 자세가 threshold보다 작거나 같으면 그 부위에 대한 피드백 해줌.
+      if (score_list[idx] <= threshold)
+        prefs.setString('feedback', sideCrunchCommand[key[idx]]!);
+      // 스코어가 제일 낮은 값의 자세가 threshold보다 크면 모든 부위가 정확한 자세를 취한 것이므로 훌륭한 자세라고 함
+      else
+        prefs.setString('feedback', "훌륭한 자세입니다!");
+    }
   }
 }
