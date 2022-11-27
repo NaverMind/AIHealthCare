@@ -53,7 +53,7 @@ class _DetectPageState extends State<DetectPage> {
     prefs = await SharedPreferences.getInstance();
     prefs.setString('feedback', '');
     prefs.setString('part', '');
-    prefs.setDouble('score', 0.0);
+    prefs.setDouble('score_sum', 0.0);
   }
 
   @override
@@ -86,12 +86,12 @@ class _DetectPageState extends State<DetectPage> {
                 startTime: Value(startTime),
                 feedback: Value(prefs.getString('feedback')!),
                 part: Value(prefs.getString('part')!),
-                score: Value(prefs.getDouble('score')!.toInt()),
+                score: Value(prefs.getDouble('score_sum')!.toInt()),
               ),
             );
             prefs.setString('feedback', '');
             prefs.setString('part', '');
-            prefs.setDouble('score', 0.0);
+            prefs.setDouble('score_sum', 0.0);
           }
           setState(() {
             isInFeedbackTime = false;
