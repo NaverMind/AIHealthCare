@@ -22,6 +22,9 @@ class LocalDatabase extends _$LocalDatabase {
   Future<List<FeedbackScore>> getFeedbackScores() =>
       select(feedbackScores).get();
 
+  Stream<List<FeedbackScore>> watchFeedbackScores(DateTime date) =>
+      (select(feedbackScores)..where((tbl)=>tbl.startTime.equals(date))).watch();
+
   @override
   int get schemaVersion => 1;
 }

@@ -6,16 +6,16 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:body_detection/body_detection.dart';
+import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:senior_fit_1/database/drift_database.dart';
 import 'package:senior_fit_1/model/standing_side_crunch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/result_page.dart';
 import 'pose_mask_painter.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import 'package:senior_fit_1/model/bird_dog.dart';
-
-import 'package:senior_fit_1/main.dart';
 
 class DetectPage extends StatefulWidget {
   final String actionname;
@@ -48,6 +48,28 @@ class _DetectPageState extends State<DetectPage> {
   late StreamSubscription timerStreamSubscription;
   bool isActiveStart = false;
   bool isInFeedbackTime = false;
+  late DateTime startTime;
+  /// 실험 변수 기본 값..수정 x
+  int readyBeepTermMillisecond = 1000;
+  int readyBeepCount = 3;
+  int inScoringTimeMillisecond = 1000;
+  double ttsSetSpeechRate = 0.5;
+
+  /// 실험 변수 설정
+  void settingForExp(){
+    if(widget.actionname == '사이드 크런치'){
+      readyBeepTermMillisecond = 1000;
+      readyBeepCount = 3;
+      inScoringTimeMillisecond = 1000;
+      ttsSetSpeechRate = 0.5;
+    }else if(widget.actionname == '버드독'){
+      readyBeepTermMillisecond = 1000;
+      readyBeepCount = 3;
+      inScoringTimeMillisecond = 1000;
+      ttsSetSpeechRate = 0.5;
+    }
+  }
+
 
   _loadPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -60,12 +82,13 @@ class _DetectPageState extends State<DetectPage> {
   void initState() {
     super.initState();
     _loadPrefs();
+    settingForExp();
 
-    DateTime startTime = DateTime.now();
+    startTime = DateTime.now();
     _startCameraStream();
     // print('☠️ log: initState');
     flutterTts.setLanguage('ko');
-    flutterTts.setSpeechRate(0.4);
+    flutterTts.setSpeechRate(ttsSetSpeechRate);
     timerStream = _startTimerStream();
     timerStreamSubscription = timerStream.listen((event) async {
       if (event) {
@@ -79,8 +102,8 @@ class _DetectPageState extends State<DetectPage> {
           if (feedbackStr != '') {
             flutterTts.speak(feedbackStr!);
             // TODO: db에 저장 필요.
-            // activename, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
-            await database.createFeedbackScore(
+            // active name, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
+            final keyValue = await GetIt.I<LocalDatabase>().createFeedbackScore(
               FeedbackScoresCompanion(
                 activeName: Value(widget.actionname),
                 startTime: Value(startTime),
@@ -89,6 +112,7 @@ class _DetectPageState extends State<DetectPage> {
                 score: Value(prefs.getDouble('score_sum')!.toInt()),
               ),
             );
+            print('👍👍👍👍 database : $keyValue 저장 완료');
             prefs.setString('feedback', '');
             prefs.setString('part', '');
             prefs.setDouble('score_sum', 0.0);
@@ -146,16 +170,19 @@ class _DetectPageState extends State<DetectPage> {
 
     int cntTemp = 0;
     while (true) {
-      if (cntTemp < 3) {
+      if (cntTemp < readyBeepCount) {
         cntTemp++;
         yield false;
+        await Future.delayed(Duration(
+          milliseconds: readyBeepTermMillisecond,
+        ));
       } else {
         cntTemp = 0;
         yield true;
+        await Future.delayed(Duration(
+          milliseconds: inScoringTimeMillisecond,
+        ));
       }
-      await Future.delayed(const Duration(
-        milliseconds: 1000,
-      ));
     }
   }
 
@@ -200,7 +227,7 @@ class _DetectPageState extends State<DetectPage> {
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
     if (pose != null) {
       isInCamera = true;
-      for (final part in pose!.landmarks) {
+      for (final part in pose.landmarks) {
         if (part.position.x < 0 ||
             part.position.x > _imageSize.width ||
             part.position.y < 0 ||
@@ -358,7 +385,14 @@ class _DetectPageState extends State<DetectPage> {
               child: IconButton(
                 onPressed: () {
                   _stopCameraStream();
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                                actionname: widget.actionname,
+                                startTime: startTime,
+                              )));
                 },
                 icon: const Icon(
                   Icons.cancel_outlined,

@@ -1,6 +1,7 @@
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:senior_fit_1/screens/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fit_1/screens/home_list.dart';
@@ -11,11 +12,11 @@ import 'database/drift_database.dart';
 // App에 넣음
 // ch-appui test
 late SharedPreferences prefs;
-late final database;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  database = LocalDatabase();
+  final database = LocalDatabase();
+  GetIt.I.registerSingleton<LocalDatabase>(database);
   prefs = await SharedPreferences.getInstance();
   // await prefs.clear(); // for test
   runApp(const MyApp());
