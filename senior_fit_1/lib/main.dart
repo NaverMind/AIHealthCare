@@ -10,7 +10,7 @@ import 'package:senior_fit_1/screens/mypage.dart';
 
 import 'database/drift_database.dart';
 // App에 넣음
-// ch-appui test
+// ch-forPull test
 late SharedPreferences prefs;
 
 void main() async {
