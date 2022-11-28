@@ -55,7 +55,7 @@ class _DetectPageState extends State<DetectPage> {
   int inScoringTimeMillisecond = 1000;
   double ttsSetSpeechRate = 0.5;
 
-  /// 실험 변수 설정
+  /// 실험 변수 설정========================================
   void settingForExp(){
     if(widget.actionname == '사이드 크런치'){
       readyBeepTermMillisecond = 1000;
@@ -69,7 +69,7 @@ class _DetectPageState extends State<DetectPage> {
       ttsSetSpeechRate = 0.5;
     }
   }
-
+  /// ===================================================
 
   _loadPrefs() async {
     prefs = await SharedPreferences.getInstance();
