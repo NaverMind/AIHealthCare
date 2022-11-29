@@ -54,6 +54,10 @@ class _DetectPageState extends State<DetectPage> {
   int readyBeepCount = 3;
   int inScoringTimeMillisecond = 1000;
   double ttsSetSpeechRate = 0.5;
+  bool youziSoundOn = true;
+  bool jongRoSoundOn = true;
+  bool breakTimeOn = false;
+  int breakTimeMillisecond = 0;
 
   /// 실험 변수 설정========================================
   void settingForExp(){
@@ -62,11 +66,19 @@ class _DetectPageState extends State<DetectPage> {
       readyBeepCount = 3;
       inScoringTimeMillisecond = 1000;
       ttsSetSpeechRate = 0.5;
+      youziSoundOn = false;
+      jongRoSoundOn = false;
+      breakTimeOn = false;
+      breakTimeMillisecond = 0;
     }else if(widget.actionname == '버드독'){
       readyBeepTermMillisecond = 1000;
       readyBeepCount = 3;
-      inScoringTimeMillisecond = 1000;
+      inScoringTimeMillisecond = 5000;
       ttsSetSpeechRate = 0.5;
+      youziSoundOn = true;
+      jongRoSoundOn = true;
+      breakTimeOn = true;
+      breakTimeMillisecond = 5000;
     }
   }
   /// ===================================================
@@ -96,8 +108,17 @@ class _DetectPageState extends State<DetectPage> {
         setState(() {
           isInFeedbackTime = true;
         });
+        if(youziSoundOn) {
+          flutterTts.speak('유지');
+        }
+
       } else {
         if (isInFeedbackTime) {
+          if(jongRoSoundOn){
+            flutterTts.speak('종료');
+          }else{
+            FlutterBeep.beep(false);
+          }
           String? feedbackStr = prefs.getString('feedback');
           if (feedbackStr != '') {
             flutterTts.speak(feedbackStr!);
@@ -120,8 +141,9 @@ class _DetectPageState extends State<DetectPage> {
           setState(() {
             isInFeedbackTime = false;
           });
+        }else{
+          FlutterBeep.beep(false);
         }
-        FlutterBeep.beep(false);
       }
     });
   }
@@ -158,7 +180,7 @@ class _DetectPageState extends State<DetectPage> {
     }
 
     await flutterTts.speak('3초뒤 운동을 시작합니다');
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(milliseconds: 3000));
     await flutterTts.speak('3');
     await Future.delayed(const Duration(milliseconds: 1000));
     await flutterTts.speak('2');
@@ -169,8 +191,18 @@ class _DetectPageState extends State<DetectPage> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     int cntTemp = 0;
+    bool isFirst = true;
     while (true) {
-      if (cntTemp < readyBeepCount) {
+      if(cntTemp == 0){
+        cntTemp++;
+        if(isFirst){
+          isFirst = false;
+          continue;
+        }
+        yield false;
+        await Future.delayed(Duration(milliseconds: breakTimeMillisecond));
+
+      } else if (cntTemp < readyBeepCount+1) {
         cntTemp++;
         yield false;
         await Future.delayed(Duration(
