@@ -72,7 +72,9 @@ class _ResultPageState extends State<ResultPage> {
               color: Colors.white,
               child: Column(
                 children: [
-                  SizedBox(height: 60,),
+                  SizedBox(
+                    height: 60,
+                  ),
                   Container(
                     padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
                     child: Text(
@@ -87,9 +89,13 @@ class _ResultPageState extends State<ResultPage> {
                       color: Color(0xffE1D9FC),
                     ),
                   ),
-                  SizedBox(height: 25,),
+                  SizedBox(
+                    height: 25,
+                  ),
                   Image.asset('images/free-icon-score-7858570 1.png'),
-                  SizedBox(height: 25,),
+                  SizedBox(
+                    height: 25,
+                  ),
                   Text(
                     '운동 점수는',
                     style: TextStyle(
@@ -97,7 +103,9 @@ class _ResultPageState extends State<ResultPage> {
                         color: Colors.black,
                         fontSize: 25),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     '${activeScore.toString()}점',
                     style: TextStyle(
@@ -105,7 +113,9 @@ class _ResultPageState extends State<ResultPage> {
                         color: Color(0xff560BAD),
                         fontSize: 50),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     '입니다',
                     style: TextStyle(
@@ -204,10 +214,17 @@ class _ResultPageState extends State<ResultPage> {
                                 );
                               },
                             )
-                          : Text('empty'),
+                          : Center(
+                              child: Text(
+                              '받은 피드백이 없어요ㅠㅠ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 23),
+                            )),
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.of(context).pop();
                       },
                       child: Container(
@@ -226,7 +243,9 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30,)
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 ),
               ),

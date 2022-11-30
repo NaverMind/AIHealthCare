@@ -24,11 +24,27 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(250.0),
-          child: Container(
-            color: Colors.white,
-            child: Image.asset(imagee[action]!, fit: BoxFit.cover),
+        appBar: AppBar(
+          elevation: 0.2,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          toolbarHeight: 250,
+          leading: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: const Icon(Icons.arrow_back_ios,size: 30,),
+              ),
+            ],
+          ),
+          flexibleSpace: PreferredSize(
+            preferredSize: const Size.fromHeight(250.0),
+            child: SafeArea(
+              child: Container(
+                color: Colors.white,
+                child: Image.asset(imagee[action]!, fit: BoxFit.cover),
+              ),
+            ),
           ),
         ),
         body: ListView(
@@ -116,8 +132,10 @@ class Tile extends StatelessWidget {
       color: Colors.white,
       onPressed: () {
         if (isCamera) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => DetectPage(actionname: actionname,)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetectPage(
+                    actionname: actionname,
+                  )));
         } else {
           Navigator.push(
               context,
