@@ -71,14 +71,14 @@ class _DetectPageState extends State<DetectPage> {
       breakTimeOn = false;
       breakTimeMillisecond = 0;
     }else if(widget.actionname == '버드독'){
-      readyBeepTermMillisecond = 1000;
+      readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
-      inScoringTimeMillisecond = 5000;
+      inScoringTimeMillisecond = 7000;
       ttsSetSpeechRate = 0.5;
       youziSoundOn = true;
       jongRoSoundOn = true;
       breakTimeOn = true;
-      breakTimeMillisecond = 5000;
+      breakTimeMillisecond = 10000;
     }
   }
   /// ===================================================
