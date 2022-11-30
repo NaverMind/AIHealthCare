@@ -112,7 +112,7 @@ class Tile extends StatelessWidget {
   var youtubelink = {
     '플랭크': 'VPZvWMXNfwk',
     '푸시업': '_m31z7To0Ko',
-    '버드독': '_m31z7To0Ko',
+    '버드독': 'SfjFnlwBwgE',
     '사이드 크런치': 'GjaYv6vaqu8'
   };
 
