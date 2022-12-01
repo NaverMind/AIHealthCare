@@ -9,6 +9,8 @@ class Note extends StatefulWidget {
 }
 
 class _MyPageState extends State<Note> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +32,13 @@ class _MyPageState extends State<Note> {
                   children: [
                     const SizedBox(width: 20,),
                     Image.asset(
-                      'images/plank.png',
+                      'images/man.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
                     const Text(
-                      ' 플랭크',
+                      ' 사이드 크런치',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -48,7 +50,7 @@ class _MyPageState extends State<Note> {
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(),
+                child: LineChartSample2(actionName: '사이드 크런치',),
               ),
               const SizedBox(
                 height: 10,
@@ -65,7 +67,7 @@ class _MyPageState extends State<Note> {
                       fit: BoxFit.contain,
                     ),
                     const Text(
-                      ' 푸시업',
+                      ' 버드독',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -77,7 +79,7 @@ class _MyPageState extends State<Note> {
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(),
+                child: LineChartSample2(actionName: '버드독',),
               ),
               const SizedBox(
                 height: 10,
@@ -106,7 +108,7 @@ class _MyPageState extends State<Note> {
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(),
+                child: LineChartSample2(actionName: '무릎 푸시업',),
               ),
               const SizedBox(
                 height: 10,
@@ -117,13 +119,13 @@ class _MyPageState extends State<Note> {
                   children: [
                     const SizedBox(width: 20,),
                     Image.asset(
-                      'images/man.png',
+                      'images/plank.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.contain,
                     ),
                     const Text(
-                      ' 사이드 크런치',
+                      ' 플랭크',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -135,7 +137,7 @@ class _MyPageState extends State<Note> {
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(),
+                child: LineChartSample2(actionName: '플랭크',),
               ),
             ],
           ),

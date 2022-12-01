@@ -1,20 +1,88 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '../database/drift_database.dart';
 
 class LineChartSample2 extends StatefulWidget {
-  const LineChartSample2({super.key});
+  final String actionName;
+
+  const LineChartSample2({super.key, required this.actionName});
 
   @override
   State<LineChartSample2> createState() => _LineChartSample2State();
 }
 
 class _LineChartSample2State extends State<LineChartSample2> {
+  List<FlSpot> spotList = [
+    FlSpot(0, 0),
+    FlSpot(1, 0),
+    FlSpot(2, 0),
+    FlSpot(3, 0),
+    FlSpot(4, 0),
+    FlSpot(5, 0),
+    FlSpot(6, 0),
+  ];
+  List<List<int>> spotTemp = [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ];
+
   List<Color> gradientColors = [
     const Color(0xff7209B7),
     const Color(0xff7209B7),
   ];
 
   bool showAvg = false;
+
+  void readDatabase() async {
+    final data = await GetIt.I<LocalDatabase>()
+        .watchFeedbackScoresAct(widget.actionName);
+    print(data);
+
+    DateTime today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+
+    for (var element in data) {
+      print(element);
+
+      int diff = today.difference(element.createdAt).inDays;
+      print("diff : $diff");
+      if (diff < 7) {
+        spotTemp[diff][1] = (spotTemp[diff][1] + element.score~/4);
+        spotTemp[diff][0]++;
+      }
+    }
+    print('${widget.actionName}=============');
+    print(spotTemp);
+    print('=============');
+    setState((){
+      spotList = [
+        FlSpot(0, spotTemp[6][0] != 0 ? ((spotTemp[6][1]~/spotTemp[6][0])/10).toDouble() : 0),
+        FlSpot(1, spotTemp[5][0] != 0 ? ((spotTemp[5][1]~/spotTemp[5][0])/10).toDouble(): 0),
+        FlSpot(2, spotTemp[4][0] != 0 ? ((spotTemp[4][1]~/spotTemp[4][0])/10).toDouble(): 0),
+        FlSpot(3, spotTemp[3][0] != 0 ? ((spotTemp[3][1]~/spotTemp[3][0])/10).toDouble(): 0),
+        FlSpot(4, spotTemp[2][0] != 0 ? ((spotTemp[2][1]~/spotTemp[2][0])/10).toDouble(): 0),
+        FlSpot(5, spotTemp[1][0] != 0 ? ((spotTemp[1][1]~/spotTemp[1][0])/10).toDouble(): 0),
+        FlSpot(6, spotTemp[0][0] != 0 ? ((spotTemp[0][1]~/spotTemp[0][0])/10).toDouble(): 0),
+      ];
+    });
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,15 +241,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
       maxY: 10,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(1, 4),
-            FlSpot(2, 7),
-            FlSpot(3, 9),
-            FlSpot(4, 7),
-            FlSpot(5, 2),
-            FlSpot(6, 7),
-          ],
+          spots: spotList,
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
@@ -194,9 +254,8 @@ class _LineChartSample2State extends State<LineChartSample2> {
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withOpacity(0))
-                  .toList(),
+              colors:
+                  gradientColors.map((color) => color.withOpacity(0)).toList(),
             ),
           ),
         ),

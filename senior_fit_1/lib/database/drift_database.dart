@@ -25,6 +25,9 @@ class LocalDatabase extends _$LocalDatabase {
   Future<List<FeedbackScore>> watchFeedbackScores(DateTime startTime) =>
       (select(feedbackScores)..where((tbl)=>tbl.startTime.equals(startTime))).get();
 
+  Future<List<FeedbackScore>> watchFeedbackScoresAct(String activeName) =>
+      (select(feedbackScores)..where((tbl)=>tbl.activeName.equals(activeName))).get();
+
   @override
   int get schemaVersion => 1;
 }
