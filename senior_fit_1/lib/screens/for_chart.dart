@@ -57,7 +57,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
       int diff = today.difference(element.createdAt).inDays;
       print("diff : $diff");
       if (diff < 7) {
-        spotTemp[diff][1] = (spotTemp[diff][1] + element.score~/4);
+        spotTemp[diff][1] = (spotTemp[diff][1] + element.score);
         spotTemp[diff][0]++;
       }
     }

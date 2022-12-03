@@ -92,21 +92,23 @@ class _NoteDetailState extends State<NoteDetail> {
     print(sortedNotePartCounter);
     print('횟수 $partCounter');
     print('=============');
-    setState(() {
-      for (int i = 0; i < spotTemp.length; i++) {
-        if (spotTemp[i][0] != 0) {
-          if (spotTemp[i][1] > bestSeScore) {
-            DateTime day = DateTime.now().add(Duration(days: -i));
-            bestSeDate = '${day.year}.${day.month}.${day.day}';
-            bestSeScore = spotTemp[i][1] ~/ spotTemp[i][0];
-          }
-          if (spotTemp[i][1] < worstSeScore) {
-            DateTime day = DateTime.now().add(Duration(days: -i));
-            worstSeDate = '${day.year}.${day.month}.${day.day}';
-            worstSeScore = spotTemp[i][1] ~/ spotTemp[i][0];
-          }
+
+    for (int i = 0; i < spotTemp.length; i++) {
+      if (spotTemp[i][0] != 0) {
+        if (spotTemp[i][1]~/ spotTemp[i][0] < worstSeScore) {
+          DateTime day = DateTime.now().add(Duration(days: -i));
+          worstSeDate = '${day.year}.${day.month}.${day.day}';
+          worstSeScore = spotTemp[i][1] ~/ spotTemp[i][0];
         }
+        if (spotTemp[i][1]~/ spotTemp[i][0] > bestSeScore) {
+          DateTime day2 = DateTime.now().add(Duration(days: -i));
+          bestSeDate = '${day2.year}.${day2.month}.${day2.day}';
+          bestSeScore = spotTemp[i][1] ~/ spotTemp[i][0];
+        }
+
       }
+    }
+    setState(() {
       if (worstSeScore == 101) {
         worstSeScore = 0;
       }
@@ -179,7 +181,7 @@ class _NoteDetailState extends State<NoteDetail> {
                             Column(
                               children: [
                                 Text(
-                                  bestSeScore.toString(),
+                                  '${bestSeScore.toString()}%',
                                   style: TextStyle(
                                     color: Color(0xff169901),
                                     fontSize: 25,
@@ -223,7 +225,7 @@ class _NoteDetailState extends State<NoteDetail> {
                             Column(
                               children: [
                                 Text(
-                                  worstSeScore.toString(),
+                                  '${worstSeScore.toString()}%',
                                   style: TextStyle(
                                     color: Color(0xffFF0000),
                                     fontSize: 25,
