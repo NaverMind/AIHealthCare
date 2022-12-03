@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fit_1/screens/for_chart.dart';
+import 'package:senior_fit_1/screens/note_detail.dart';
 
 class Note extends StatefulWidget {
   const Note({Key? key}) : super(key: key);
@@ -9,18 +10,18 @@ class Note extends StatefulWidget {
 }
 
 class _MyPageState extends State<Note> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('운동 노트'),
         backgroundColor: Colors.white,
-        titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 23),
+        titleTextStyle: const TextStyle(
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
         elevation: 0.0,
       ),
       body: Container(
+        color: Colors.white,
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
@@ -30,7 +31,9 @@ class _MyPageState extends State<Note> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Image.asset(
                       'images/man.png',
                       height: 40,
@@ -48,9 +51,24 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(actionName: '사이드 크런치',),
+                child: Stack(children: [
+                  LineChartSample2(
+                    actionName: '사이드 크런치',
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context)=>NoteDetail(
+                            actionName: '사이드 크런치',
+                          ))
+                      );
+                    }, icon: Icon(Icons.add_circle_outline,color: Color(0xff7209B7),)),
+                  )
+                ]),
               ),
               const SizedBox(
                 height: 10,
@@ -59,7 +77,9 @@ class _MyPageState extends State<Note> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Image.asset(
                       'images/pushup.png',
                       height: 40,
@@ -77,9 +97,24 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(actionName: '버드독',),
+                child: Stack(children: [
+                  LineChartSample2(
+                    actionName: '버드독',
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context)=>NoteDetail(
+                            actionName: '버드독',
+                          ))
+                      );
+                    }, icon: Icon(Icons.add_circle_outline,color: Color(0xff7209B7),)),
+                  )
+                ]),
               ),
               const SizedBox(
                 height: 10,
@@ -88,7 +123,9 @@ class _MyPageState extends State<Note> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Image.asset(
                       'images/npush.png',
                       height: 40,
@@ -106,9 +143,24 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(actionName: '무릎 푸시업',),
+                child: Stack(children: [
+                  LineChartSample2(
+                    actionName: '무릎 푸시업',
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context)=>NoteDetail(
+                            actionName: '무릎 푸시업',
+                          ))
+                      );
+                    }, icon: Icon(Icons.add_circle_outline,color: Color(0xff7209B7),)),
+                  )
+                ]),
               ),
               const SizedBox(
                 height: 10,
@@ -117,7 +169,9 @@ class _MyPageState extends State<Note> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Image.asset(
                       'images/plank.png',
                       height: 40,
@@ -135,9 +189,24 @@ class _MyPageState extends State<Note> {
                   ],
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(15, 3, 15, 10),
-                child: LineChartSample2(actionName: '플랭크',),
+                child: Stack(children: [
+                  LineChartSample2(
+                    actionName: '플랭크',
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context)=>NoteDetail(
+                            actionName: '플랭크',
+                          ))
+                      );
+                    }, icon: Icon(Icons.add_circle_outline,color: Color(0xff7209B7),)),
+                  )
+                ]),
               ),
             ],
           ),
