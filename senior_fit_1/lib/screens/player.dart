@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -33,30 +34,64 @@ class PlayerState extends State<Player> {
         enableCaption: true,
       ),
     );
+
+    setHori();
+  }
+
+  void setHori() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  void setVer() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    setVer();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _videoTitle,
-          style: const TextStyle(fontSize: 20.0),
+      body: Stack(children: [
+        YoutubePlayer(
+          key: ObjectKey(_controller),
+          controller: _controller,
+          actionsPadding: const EdgeInsets.only(left: 16.0),
+          bottomActions: [
+            CurrentPosition(),
+            const SizedBox(width: 10.0),
+            ProgressBar(isExpanded: true),
+            const SizedBox(width: 10.0),
+            RemainingDuration(),
+            //FullScreenButton(),
+          ],
         ),
-      ),
-      body: YoutubePlayer(
-        key: ObjectKey(_controller),
-        controller: _controller,
-        actionsPadding: const EdgeInsets.only(left: 16.0),
-        bottomActions: [
-          CurrentPosition(),
-          const SizedBox(width: 10.0),
-          ProgressBar(isExpanded: true),
-          const SizedBox(width: 10.0),
-          RemainingDuration(),
-          //FullScreenButton(),
-        ],
-      ),
+        Positioned(
+          top: 20,
+          left: 30,
+          child: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.cancel_outlined,
+              size: 40,
+              color: Colors.red,
+            ),
+          ),
+        )
+      ]),
     );
   }
 }
