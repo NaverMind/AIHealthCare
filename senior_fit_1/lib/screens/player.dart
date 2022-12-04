@@ -35,7 +35,7 @@ class PlayerState extends State<Player> {
       ),
     );
 
-    setHori();
+    setVer();
   }
 
   void setHori() async {
@@ -48,10 +48,7 @@ class PlayerState extends State<Player> {
 
   void setVer() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    await SystemChrome.setPreferredOrientations([]);
   }
 
   @override
@@ -63,35 +60,37 @@ class PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [
-        YoutubePlayer(
+      body: Center(
+        child: YoutubePlayer(
           key: ObjectKey(_controller),
           controller: _controller,
           actionsPadding: const EdgeInsets.only(left: 16.0),
           bottomActions: [
+            const SizedBox(width: 10.0),
             CurrentPosition(),
             const SizedBox(width: 10.0),
             ProgressBar(isExpanded: true),
             const SizedBox(width: 10.0),
             RemainingDuration(),
-            //FullScreenButton(),
+            FullScreenButton(),
           ],
-        ),
-        Positioned(
-          top: 20,
-          left: 30,
-          child: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.cancel_outlined,
-              size: 40,
-              color: Colors.red,
+          topActions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.cancel_outlined,
+                size: 40,
+                color: Colors.red,
+              ),
             ),
-          ),
-        )
-      ]),
+          ],
+          onEnded: (_) {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
     );
   }
 }

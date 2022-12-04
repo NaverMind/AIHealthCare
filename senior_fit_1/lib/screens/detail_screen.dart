@@ -35,7 +35,7 @@ class _DetailScreenState extends State<DetailScreen> {
     '사이드 크런치': 'GjaYv6vaqu8'
   };
 
-  int newValue = 8;
+  int newValue = 10;
 
   late SharedPreferences prefs;
 
