@@ -47,6 +47,14 @@ dependencies:
   flutter_tts: ^3.6.0
   body_detection: ^0.0.3
   image_picker: ^0.8.6
+  fl_chart: ^0.55.2
+  flutter_beep: ^1.0.0
+  drift: ^2.2.0
+  sqlite3_flutter_libs: ^0.5.0
+  path: ^1.8.2
+  get_it: ^7.2.0
+  flutter_svg: ^1.1.6
+  numberpicker: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +66,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  drift_dev: ^2.2.0+1
+  build_runner: ^2.2.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

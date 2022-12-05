@@ -1,17 +1,22 @@
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:senior_fit_1/screens/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fit_1/screens/home_list.dart';
 import 'package:senior_fit_1/screens/note.dart';
 import 'package:senior_fit_1/screens/mypage.dart';
 
+import 'database/drift_database.dart';
+// App에 넣음
+// ch-appui test
 late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  final database = LocalDatabase();
+  GetIt.I.registerSingleton<LocalDatabase>(database);
   prefs = await SharedPreferences.getInstance();
   // await prefs.clear(); // for test
   runApp(const MyApp());
@@ -24,13 +29,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     bool visited = prefs.getBool('visited') ?? false;
     return MaterialApp(
-      home: visited ? MyHomePage() : OnBoardingPage(),
+      home: visited ? const MyHomePage() : const OnBoardingPage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({
+  const MyHomePage({
     Key? key,
     this.title,
   }) : super(key: key);
@@ -43,23 +48,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int selectedPos = 1;
 
-  double bottomNavBarHeight = 60;
+  double bottomNavBarHeight = 70;
 
   List<TabItem> tabItems = List.of([
     TabItem(
       Icons.sticky_note_2_rounded,
       "운동노트",
       Colors.blue,
-      labelStyle: TextStyle(
-        fontWeight: FontWeight.normal,
+      labelStyle: const TextStyle(
+        color: Colors.blue,
+        fontWeight: FontWeight.bold,
       ),
     ),
     TabItem(
       Icons.home,
       "홈",
-      Colors.orange,
-      labelStyle: TextStyle(
-        color: Colors.red,
+      Colors.purple,
+      labelStyle: const TextStyle(
+        color: Colors.purple,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -67,6 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Icons.account_box,
       "마이페이지",
       Colors.red,
+      labelStyle: const TextStyle(
+        color: Colors.red,
+        fontWeight: FontWeight.bold,
+      ),
     ),
   ]);
 
@@ -98,13 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
     String slogan;
     switch (selectedPos) {
       case 0:
-        return Note();
+        return const Note();
       case 1:
-        return Homelist();
+        return const Homelist();
       case 2:
-        return MyPage();
+        return const MyPage();
       default:
-        return Center(child: Text('Error'));
+        return const Center(child: Text('Error'));
     }
 
   }
@@ -117,9 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
       barHeight: bottomNavBarHeight,
       barBackgroundColor: Colors.white,
       backgroundBoxShadow: <BoxShadow>[
-        BoxShadow(color: Colors.black45, blurRadius: 10.0),
+        const BoxShadow(color: Colors.black45, blurRadius: 10.0),
       ],
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       selectedCallback: (int? selectedPos) {
         setState(() {
           this.selectedPos = selectedPos ?? 0;

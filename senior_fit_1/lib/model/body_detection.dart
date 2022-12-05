@@ -1,28 +1,39 @@
-import 'dart:html';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:math';
+import 'dart:async';
+
 import 'package:body_detection/models/image_result.dart';
 import 'package:body_detection/models/pose.dart';
-import 'package:body_detection/models/body_mask.dart';
-import 'package:body_detection/png_image.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-
 import 'package:body_detection/body_detection.dart';
+import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:senior_fit_1/database/drift_database.dart';
+import 'package:senior_fit_1/model/standing_side_crunch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/result_page.dart';
 import 'pose_mask_painter.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_beep/flutter_beep.dart';
+import 'package:senior_fit_1/model/bird_dog.dart';
 
 class DetectPage extends StatefulWidget {
-  const DetectPage({Key? key}) : super(key: key);
+  final String actionname;
+  final int counter;
+
+  DetectPage({
+    Key? key,
+    required this.actionname,
+    required this.counter,
+  }) : super(key: key);
 
   @override
   State<DetectPage> createState() => _DetectPageState();
 }
 
 class _DetectPageState extends State<DetectPage> {
+  late SharedPreferences prefs;
+
   Pose? _detectedPose;
   ui.Image? _maskImage;
   Image? _cameraImage;
@@ -30,18 +41,140 @@ class _DetectPageState extends State<DetectPage> {
   int currentMilliSecondsCompleteImage = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsPostTemp = DateTime.now().millisecondsSinceEpoch;
   int currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
-  late int infTime;
-  late int dectTime;
+  int infTime = DateTime.now().millisecondsSinceEpoch;
+  int dectTime = DateTime.now().millisecondsSinceEpoch;
+  bool isInCamera = false;
+  int isInCameraCnt = 0;
+  final FlutterTts flutterTts = FlutterTts();
+  late Stream<bool> timerStream;
+  late StreamSubscription timerStreamSubscription;
+  bool isActiveStart = false;
+  bool isInFeedbackTime = false;
+  late DateTime startTime;
+  int thisCounter = 0;
+
+  /// 실험 변수 기본 값..수정 x
+  int readyBeepTermMillisecond = 1000;
+  int readyBeepCount = 3;
+  int inScoringTimeMillisecond = 1000;
+  double ttsSetSpeechRate = 0.5;
+  bool youziSoundOn = true;
+  bool jongRoSoundOn = true;
+  bool breakTimeOn = false;
+  int breakTimeMillisecond = 0;
+
+  /// 실험 변수 설정=======================================
+   void settingForExp() {
+    if (widget.actionname == '사이드 크런치') {
+      readyBeepTermMillisecond = 500;
+      readyBeepCount = 3;
+      inScoringTimeMillisecond = 500;
+      ttsSetSpeechRate = 0.5;
+      youziSoundOn = false;
+      jongRoSoundOn = false;
+      breakTimeOn = true;
+      breakTimeMillisecond = 2500;
+    }
+    else if(widget.actionname == '버드독'){
+      readyBeepTermMillisecond = 500;
+      readyBeepCount = 3;
+      inScoringTimeMillisecond = 7000;
+      ttsSetSpeechRate = 0.5;
+      youziSoundOn = true;
+      jongRoSoundOn = true;
+      breakTimeOn = true;
+      breakTimeMillisecond = 10000;
+    }
+  }
+
+  /// ===================================================
+
+  _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('feedback', '');
+    prefs.setString('part', '');
+    prefs.setDouble('score_sum', 0.0);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPrefs();
+    settingForExp();
+
+    startTime = DateTime.now();
+    _startCameraStream();
+    // print('☠️ log: initState');
+    flutterTts.setLanguage('ko');
+    flutterTts.setSpeechRate(ttsSetSpeechRate);
+    timerStream = _startTimerStream();
+    timerStreamSubscription = timerStream.listen((event) async {
+      if (event) {
+        FlutterBeep.beep(true);
+        setState(() {
+          isInFeedbackTime = true;
+        });
+        if (youziSoundOn) {
+          flutterTts.speak('유지');
+        }
+      } else {
+        if (isInFeedbackTime) {
+          if (jongRoSoundOn) {
+            flutterTts.speak('종료');
+          } else {
+            FlutterBeep.beep(false);
+          }
+          String? feedbackStr = prefs.getString('feedback');
+          if (feedbackStr != '') {
+            flutterTts.speak(feedbackStr!);
+            thisCounter++;
+            // TODO: db에 저장 필요.
+            // active name, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
+            final keyValue = await GetIt.I<LocalDatabase>().createFeedbackScore(
+              FeedbackScoresCompanion(
+                activeName: Value(widget.actionname),
+                startTime: Value(startTime),
+                feedback: Value(prefs.getString('feedback')!),
+                part: Value(prefs.getString('part')!),
+                score: Value(prefs.getDouble('score_sum')!.toInt()),
+              ),
+            );
+            print('👍👍👍👍 database : $keyValue 저장 완료');
+            prefs.setString('feedback', '');
+            prefs.setString('part', '');
+            prefs.setDouble('score_sum', 0.0);
+          }
+          setState(() {
+            isInFeedbackTime = false;
+          });
+        } else {
+          FlutterBeep.beep(false);
+        }
+      }
+      if(thisCounter == widget.counter){
+        _stopCameraStream();
+        // Navigator.pop(context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ResultPage(
+                  actionname: widget.actionname,
+                  startTime: startTime,
+                )));
+      }
+    });
+  }
 
   Future<void> _startCameraStream() async {
     final request = await Permission.camera.request();
 
     if (request.isGranted) {
       await BodyDetection.enablePoseDetection();
-      print('☠️ enable~startCameraStream');
+      // print('☠️ enable~startCameraStream');
       await BodyDetection.startCameraStream(
         onFrameAvailable: _handleCameraImage,
         onPoseAvailable: (pose) {
+          // print('onposeAvailable');
           _handlePose(pose);
         },
       );
@@ -49,8 +182,56 @@ class _DetectPageState extends State<DetectPage> {
 
     setState(() {
       _detectedPose = null;
-      print('☠️ log: _detectedPose = null');
+      // print('☠️ log: _detectedPose = null');
     });
+  }
+
+  Stream<bool> _startTimerStream() async* {
+    while (true) {
+      if (isActiveStart) {
+        break;
+      }
+      await Future.delayed(const Duration(
+        seconds: 1,
+      ));
+    }
+
+    await flutterTts.speak('3초뒤 운동을 시작합니다');
+    await Future.delayed(const Duration(milliseconds: 3000));
+    await flutterTts.speak('3');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await flutterTts.speak('2');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await flutterTts.speak('1');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await flutterTts.speak('시작');
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    int cntTemp = 0;
+    bool isFirst = true;
+    while (true) {
+      if (cntTemp == 0) {
+        cntTemp++;
+        if (isFirst) {
+          isFirst = false;
+          continue;
+        }
+        yield false;
+        await Future.delayed(Duration(milliseconds: breakTimeMillisecond));
+      } else if (cntTemp < readyBeepCount + 1) {
+        cntTemp++;
+        yield false;
+        await Future.delayed(Duration(
+          milliseconds: readyBeepTermMillisecond,
+        ));
+      } else {
+        cntTemp = 0;
+        yield true;
+        await Future.delayed(Duration(
+          milliseconds: inScoringTimeMillisecond,
+        ));
+      }
+    }
   }
 
   Future<void> _stopCameraStream() async {
@@ -59,7 +240,7 @@ class _DetectPageState extends State<DetectPage> {
     setState(() {
       _cameraImage = null;
       _imageSize = Size.zero;
-      print('☠️ log: _stopCameraStream');
+      // print('☠️ log: _stopCameraStream');
     });
   }
 
@@ -69,9 +250,9 @@ class _DetectPageState extends State<DetectPage> {
 
     // To avoid a memory leak issue.
     // https://github.com/flutter/flutter/issues/60160
-    PaintingBinding.instance?.imageCache?.clear();
-    PaintingBinding.instance?.imageCache?.clearLiveImages();
-    print('☠️ log: _handleCameraImage');
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
+    // print('☠️ log: _handleCameraImage');
 
     final image = Image.memory(
       result.bytes,
@@ -86,278 +267,205 @@ class _DetectPageState extends State<DetectPage> {
     });
   }
 
-  img_resize(pose_vector, real_width, real_height) {
-    pose_vector = pose_vector.reshape(-1, 1);
-    int x_max = 0;
-    int y_max = 0;
-    int x_min = 100000;
-    int y_min = 100000;
-    for (int i = 0; i < pose_vector.length; i++) {
-      if (i % 2 == 0) {
-        //x좌표
-        if (x_max < pose_vector[i]) x_max = pose_vector[i];
-        if (x_min > pose_vector[i]) x_min = pose_vector[i];
-      } else {
-        if (y_max < pose_vector[i]) y_max = pose_vector[i];
-        if (y_min > pose_vector[i]) y_min = pose_vector[i];
-      }
-    }
-    for (int i = 0; i < pose_vector.length; i++) {
-      if (i % 2 == 0)
-        pose_vector[i] -= x_min;
-      else
-        pose_vector[i] -= y_min;
-    }
-    for (int i = 0; i < pose_vector.length; i++) {
-      if (i % 2 == 0) {
-        //x좌표
-        if (x_max < pose_vector[i]) x_max = pose_vector[i];
-        if (x_min > pose_vector[i]) x_min = pose_vector[i];
-      } else {
-        if (y_max < pose_vector[i]) y_max = pose_vector[i];
-        if (y_min > pose_vector[i]) y_min = pose_vector[i];
-      }
-    }
-
-    int img_width = x_max - x_min;
-    int img_height = y_max - y_min;
-
-    int wid_portion = real_width / img_width;
-    int hie_portion = real_height / img_height;
-
-    for (int i = 0; i < pose_vector.length; i++) {
-      if (i % 2 == 0)
-        pose_vector[i] = pose_vector[i] * hie_portion;
-      else
-        pose_vector[i] = pose_vector[i] * wid_portion;
-    }
-    return pose_vector.reshape(6, -1);
-  }
-
-  normalization(x) {
-    x = x.reshape(-1, 1);
-    double minVal = 1000000.0;
-    double maxVal = -1.0;
-    for (double i in x) {
-      if (x[i] > maxVal) maxVal = x[i];
-      if (x[i] < minVal) minVal = x[i];
-    }
-    for (int i = 0; i < x.length; i++) {
-      x[i] = (x[i] - minVal) / (maxVal - minVal);
-    }
-    return x.reshape(6, -1);
-  }
-
-  weightedDistanceMatching(poseVector1, poseVector2) {
-    int vector1ConfidenceSum = poseVector1.length;
-    double summation1 = 1 / vector1ConfidenceSum;
-    double summation2 = 0.0;
-    int count = 0;
-    for (int i = 0; i < poseVector1.length; i++) {
-      count++;
-      double tempSum = (poseVector1[i] - poseVector2[i]).abs();
-      summation2 += tempSum;
-    }
-    double summation = summation1 * summation2;
-    return summation;
-  }
-
-  get_angle(p1, p2, p3) {
-    // p1 = [x1,x2], p2 = [x1, x2], p3 = [x1,x2]
-    double rad = atan2(p3[1] - p1[1], p3[0] - p1[0]) -
-        atan2(p2[1] - p1[1], p2[0] - p1[0]);
-    double deg = rad * (180 / pi);
-    if (deg.abs() > 180)
-      return deg = 360 - deg.abs();
-    else
-      return deg.abs();
-  }
-
-  final Map<String, List<String>> side_crunch = {
-    "spine": [
-      'PoseLandmarkType.midShoulder',
-      "PoseLandmarkType.back",
-      "PoseLandmarkType.midHip"
-    ],
-    "left_knee_elbow": [
-      "PoseLandmarkType.leftElbow",
-      "PoseLandmarkType.midHip",
-      "PoseLandmarkType.leftKnee"
-    ],
-    "right_knee_elbow": [
-      "PoseLandmarkType.rightElbow",
-      "PoseLandmarkType.midHip",
-      "PoseLandmarkType.rightKnee"
-    ],
-    "left_body_knee": [
-      "PoseLandmarkType.nose",
-      "PoseLandmarkType.midHip",
-      "PoseLandmarkType.leftKnee"
-    ],
-    "right_body_knee": [
-      "PoseLandmarkType.nose",
-      "PoseLandmarkType.midHip",
-      "PoseLandmarkType.rightKnee"
-    ],
-    "left_elbow": [
-      "PoseLandmarkType.leftWrist",
-      "PoseLandmarkType.leftElbow",
-      "PoseLandmarkType.leftShoulder"
-    ],
-    "right_elbow": [
-      "PoseLandmarkType.rightWrist",
-      "PoseLandmarkType.rightElbow",
-      "PoseLandmarkType.rightShoulder"
-    ],
-  };
-
-  make_angle_list(keyPoints) {
-    Map<String, List<double>> result = {};
-    for (String i in side_crunch.keys) {
-      result[i] = get_angle(keyPoints[side_crunch[i]![0]],
-          keyPoints[side_crunch[i]![1]], keyPoints[side_crunch[i]![2]]);
-    }
-    return result;
-  }
-
-  make_point_list(keyPoints) {
-    List<List<double>> point_list = [];
-    for (String i in side_crunch.keys) {
-      List<double> tmp = [];
-      for (String j in side_crunch[i]!) {
-        tmp.add(keyPoints[j][0]);
-        tmp.add(keyPoints[j][1]);
-      }
-      point_list.add(tmp);
-    }
-    // 일단 200, 400으로 잡음
-    point_list = img_resize(point_list, 200, 400);
-    point_list = normalization(point_list);
-    return point_list;
-  }
-
   void _handlePose(Pose? pose) {
     // Ignore if navigated out of the page.
     if (!mounted) return;
-    print('☠️ log: _handlePose');
+    // print('☠️ log: _handlePose');
     // 여기 pose 좌표 있음
-    Map<String, List<double>> keyPoints = {};
-    for (final part in pose!.landmarks) {
-      print(part.type);
-      print(
-          '좌표 : X:${part.position.x} Y:${part.position.y} Z:${part.position.z}');
-      keyPoints[part.type] = [part.position.x, part.position.y];
-    }
-
-    keyPoints['PoseLandmarkType.midShoulder'] = [
-      ((keyPoints['PoseLandmarkType.rightShoulder']![0] +
-              keyPoints['PoseLandmarkType.leftShoulder']![0]) /
-          2),
-      ((keyPoints['PoseLandmarkType.rightShoulder']![1] +
-              keyPoints['PoseLandmarkType.leftShoulder']![1]) /
-          2)
-    ];
-    keyPoints['PoseLandmarkType.midHip'] = [
-      ((keyPoints['PoseLandmarkType.rightHip']![0] +
-              keyPoints['PoseLandmarkType.leftHip']![0]) /
-          2),
-      ((keyPoints['PoseLandmarkType.rightHip']![1] +
-              keyPoints['PoseLandmarkType.leftHip']![1]) /
-          2)
-    ];
-    keyPoints['PoseLandmarkType.back'] = [
-      ((keyPoints['PoseLandmarkType.midShoulder']![0] +
-              keyPoints['PoseLandmarkType.midHip']![0]) /
-          2),
-      ((keyPoints['PoseLandmarkType.midShoulder']![1] +
-              keyPoints['PoseLandmarkType.midHip']![1]) /
-          2)
-    ];
-
-    ///// 정답 이미지 운동 좌표를 잘 받아왔다고 침 or 여기서는 angle배열이랑 좌표 정규화한 배열 return
-    String exercise = '스탠딩 사이드 크런치';
-
-    switch (exercise) {
-      case '스탠딩 사이드 크런치':
-        Map<String, List<double>> angle_list = make_angle_list(keyPoints);
-        List<List<double>> point_list = make_point_list(keyPoints);
-        break;
-    }
-
     currentMilliSecondsCompletePose = DateTime.now().millisecondsSinceEpoch;
+    if (pose != null) {
+      isInCamera = true;
+      for (final part in pose.landmarks) {
+        if (part.position.x < 0 ||
+            part.position.x > _imageSize.width ||
+            part.position.y < 0 ||
+            part.position.y > _imageSize.height) {
+          setState(() {
+            isInCamera = false;
+            isInCameraCnt = 0;
+          });
+        }
+      }
+      if (isInCamera) {
+        setState(() {
+          isInCamera = true;
+          isInCameraCnt += 2;
+          if (isInCameraCnt > 99) {
+            isActiveStart = true;
+          }
+        });
+      }
+    } else {
+      setState(() {
+        isInCamera = false;
+        isInCameraCnt = 0;
+      });
+    }
 
     setState(() {
-      infTime = currentMilliSecondsCompletePose -currentMilliSecondsCompleteImage;
-      dectTime = currentMilliSecondsCompletePose -currentMilliSecondsPostTemp;
+      infTime =
+          currentMilliSecondsCompletePose - currentMilliSecondsCompleteImage;
+      dectTime = currentMilliSecondsCompletePose - currentMilliSecondsPostTemp;
       currentMilliSecondsPostTemp = currentMilliSecondsCompletePose;
-      print('💡 InfTime: $infTime');
+      // print('💡 InfTime: $infTime');
       _detectedPose = pose;
     });
   }
 
-  Widget get _cameraDetectionView => SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              ClipRect(
-                child: CustomPaint(
-                  child: _cameraImage,
-                  foregroundPainter: PoseMaskPainter(
-                    pose: _detectedPose,
-                    mask: _maskImage,
-                    imageSize: _imageSize,
-                  ),
-                ),
+  Widget get _cameraDetectionView => Center(
+        child: Stack(
+          children: [
+            ClipRect(
+              child: CustomPaint(
+                child: _cameraImage,
+                foregroundPainter: !isInFeedbackTime
+                    ? PoseMaskPainter(
+                        pose: _detectedPose,
+                        mask: _maskImage,
+                        imageSize: _imageSize,
+                      )
+                    : widget.actionname == '사이드 크런치'
+                        ? StandingSideCrunchPainter(
+                            pose: _detectedPose,
+                            mask: _maskImage,
+                            imageSize: _imageSize,
+                          )
+                        : BirdDogPainter(
+                            pose: _detectedPose,
+                            mask: _maskImage,
+                            imageSize: _imageSize),
               ),
-              OutlinedButton(
+            ),
+            Positioned(
+              left: -70,
+              top: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              right: -70,
+              top: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              left: -70,
+              bottom: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            Positioned(
+              right: -70,
+              bottom: -70,
+              child: Icon(
+                Icons.add_outlined,
+                size: 150,
+                color: isInCamera ? Colors.green : Colors.red,
+              ),
+            ),
+            !isActiveStart
+                ? Positioned.fill(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: !isInCamera
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    color: Color(0xCCffffff),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                  child: Text(
+                                    '프레임 안으로\n들어와주세요!',
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xCCffffff),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '100% 가 될때까지',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '화면 밖으로 벗어나지 마세요',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$isInCameraCnt %',
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                  )
+                : Positioned(child: Text('운동 시작')),
+            Positioned(
+              right: 20,
+              top: 20,
+              child: IconButton(
                 onPressed: () {
                   _stopCameraStream();
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                                actionname: widget.actionname,
+                                startTime: startTime,
+                              )));
                 },
-                child: const Text('돌아가기'),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  'InfTime: $infTime',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+                icon: const Icon(
+                  Icons.cancel_outlined,
+                  size: 40,
+                  color: Color(0xDDffffff),
                 ),
               ),
-            ],
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('DectTime: $dectTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('IO Time: ${dectTime-infTime}',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('DectTime: $dectTime',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-          OutlinedButton(
-            onPressed: (){},
-            child: Text('IO Time: ${dectTime-infTime}',style: TextStyle(color: Colors.deepPurple,fontSize: 25),),
-          ),
-        ],
-      ),
-    ),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    _startCameraStream();
-    print('☠️ log: initState');
-  }
+            ),
+            Positioned(
+                left: 20,
+                top: 10,
+                child: Text(
+                  'fps : ${1000 ~/ dectTime}',
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ))
+          ],
+        ),
+      );
 
   @override
   void dispose() {
     super.dispose();
     _stopCameraStream();
-    print('☠️ log: dispose');
+    // print('☠️ log: dispose');
+    timerStreamSubscription.cancel();
   }
 
   @override
@@ -367,3 +475,39 @@ class _DetectPageState extends State<DetectPage> {
     );
   }
 }
+//
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'InfTime: $infTime',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'DectTime: $dectTime',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'IO Time: ${dectTime - infTime}',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'Img size: ${_imageSize.height} / ${_imageSize.width}',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),
+// OutlinedButton(
+// onPressed: () {},
+// child: Text(
+// 'Img size: $isInCamera',
+// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
+// ),
+// ),

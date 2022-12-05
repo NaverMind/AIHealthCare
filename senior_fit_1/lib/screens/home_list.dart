@@ -64,7 +64,7 @@ class _HomelistState extends State<Homelist> {
   @override
   Widget build(BuildContext context) {
     double fontSizee = 28;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Scaffold(
@@ -78,39 +78,40 @@ class _HomelistState extends State<Homelist> {
           body: ListView(
             padding: const EdgeInsets.all(8),
             children: <Widget>[
-              Container(
+              const SizedBox(
                 height: 50,
-                child: const Center(
+                child: Center(
                     child: Text(
                   '오늘의 운동을 선택해주세요!',
                   style: TextStyle(fontSize: 17),
                 )),
               ),
               const Tile(
-                image: 'images/plank.png',
-                description: '가능한 최대 시간 동안 팔굽혀펴기와 비슷한 자세를 유지하는 것을 수반하는 등척성 체간근 근력 운동',
-                action: '플랭크',),
+                image: 'images/man.png',
+                description: '이것은 사이드 크런치',
+                action: '사이드 크런치',),
               Container(
                 height: 10,
               ),
-              Tile(
+              const Tile(
+                image: 'images/npush.png',
+                description: '이것은 버드독',
+                action: '버드독',),
+              Container(
+                height: 10,
+              ),
+              const Tile(
                 image: 'images/pushup.png',
                 description: '이것은 푸시업이다.',
                 action: '푸시업',),
               Container(
                 height: 10,
               ),
-              Tile(
-                image: 'images/npush.png',
-                description: '이것은 무릎 푸시업',
-                action: '무릎 푸시업',),
-              Container(
-                height: 10,
-              ),
-              Tile(
-                  image: 'images/man.png',
-                  description: '이것은 사이드 크런ㅌ치',
-                  action: '사이드 크런치',),
+              const Tile(
+                image: 'images/plank.png',
+                description: '가능한 최대 시간 동안 팔굽혀펴기와 비슷한 자세를 유지하는 것을 수반하는 등척성 체간근 근력 운동',
+                action: '플랭크',),
+
             ],
           )),
     );
@@ -143,7 +144,7 @@ class Tile extends StatelessWidget {
           ))
         );
       },
-      child: Container(
+      child: SizedBox(
         height: 82,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,7 +160,7 @@ class Tile extends StatelessWidget {
               child: Center(
                 child: Text(
                   action,
-                  style: TextStyle(fontSize: 28),
+                  style: const TextStyle(fontSize: 28),
                 ),
               ),
             ),

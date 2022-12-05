@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fit_1/screens/player.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/body_detection.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final String action;
   final String image;
   final String description;
-
-  var imagee = {
-    '플랭크': 'images/plank_detail.png',
-    '푸시업': 'images/pushup.jpg',
-    '무릎 푸시업': 'images/kneepushup.jpg',
-    '사이드 크런치': 'images/standingside.png'
-  };
 
   DetailScreen({
     required this.image,
@@ -22,13 +17,74 @@ class DetailScreen extends StatelessWidget {
   });
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  var imagee = {
+    '플랭크': 'images/plank_detail.png',
+    '푸시업': 'images/pushup.jpg',
+    '버드독': 'images/kneepushup.jpg',
+    '사이드 크런치': 'images/standingside.png'
+  };
+
+  var tutorialYoutubelink = {
+    '플랭크': 'VPZvWMXNfwk',
+    '푸시업': '_m31z7To0Ko',
+    '버드독': 'SfjFnlwBwgE',
+    '사이드 크런치': 'GjaYv6vaqu8'
+  };
+
+  int newValue = 10;
+
+  late SharedPreferences prefs;
+
+  _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      newValue = prefs.getInt('${widget.action}counter') ?? 9;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPrefs();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(250.0),
-          child: Container(
-            color: Colors.white,
-            child: Image.asset(imagee[action]!, fit: BoxFit.cover),
+        appBar: AppBar(
+          elevation: 0.2,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          toolbarHeight: 250,
+          leading: Column(
+            children: [
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          flexibleSpace: PreferredSize(
+            preferredSize: const Size.fromHeight(250.0),
+            child: SafeArea(
+              child: Container(
+                color: Colors.white,
+                child: Image.asset(imagee[widget.action]!, fit: BoxFit.cover),
+              ),
+            ),
           ),
         ),
         body: ListView(
@@ -38,7 +94,7 @@ class DetailScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   '운동종목',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -46,8 +102,8 @@ class DetailScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  action,
-                  style: TextStyle(
+                  widget.action,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                   ),
@@ -55,8 +111,8 @@ class DetailScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(4, 2, 0, 30),
                   child: Text(
-                    description,
-                    style: TextStyle(
+                    widget.description,
+                    style: const TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 14,
                     ),
@@ -69,7 +125,8 @@ class DetailScreen extends StatelessWidget {
               description: '자세를 교정받기 전 정확한 운동 자세를 배워보세요!',
               action: '운동 배우기',
               isCamera: false,
-              actionname: action,
+              actionname: widget.action,
+              counter: 0,
             ),
             Container(
               height: 10,
@@ -79,7 +136,87 @@ class DetailScreen extends StatelessWidget {
               description: '나의 자세를 실시간으로 코칭 받아 보세요!',
               action: '자세 교정받기',
               isCamera: true,
-              actionname: action,
+              actionname: widget.action,
+              counter: newValue,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Player(
+                                tutorialYoutubelink[widget.action]!,
+                                widget.action)));
+                  },
+                  child: Text(
+                    '튜토리얼',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.5);
+                        return Colors.white
+                            .withOpacity(0.5); // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.5);
+                        return Colors.black; // Use the component's default.
+                      },
+                    ),
+                    padding: MaterialStateProperty.resolveWith<EdgeInsets?>(
+                      (Set<MaterialState> states) {
+                        return EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 30); // Use the component's default.
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 90,
+                      width: 50,
+                      child: NumberPicker(
+                        selectedTextStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                        ),
+                        textStyle: TextStyle(color: Colors.grey),
+                        value: newValue,
+                        itemHeight: 30,
+                        minValue: 1,
+                        maxValue: 100,
+                        onChanged: (value) => setState(() => newValue = value),
+                      ),
+                    ),
+                    Text(
+                      '세트',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ));
@@ -91,12 +228,13 @@ class Tile extends StatelessWidget {
   final String image;
   final String description;
   final String actionname;
+  final int counter;
 
   final bool isCamera;
   var youtubelink = {
     '플랭크': 'VPZvWMXNfwk',
     '푸시업': '_m31z7To0Ko',
-    '무릎 푸시업': '_m31z7To0Ko',
+    '버드독': 'SfjFnlwBwgE',
     '사이드 크런치': 'GjaYv6vaqu8'
   };
 
@@ -106,7 +244,8 @@ class Tile extends StatelessWidget {
       required this.image,
       required this.description,
       required this.action,
-      required this.isCamera})
+      required this.isCamera,
+      required this.counter})
       : super(key: key);
 
   @override
@@ -114,10 +253,15 @@ class Tile extends StatelessWidget {
     return MaterialButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       color: Colors.white,
-      onPressed: () {
+      onPressed: () async {
         if (isCamera) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => DetectPage()));
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('${actionname}counter', counter);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DetectPage(
+                    actionname: actionname,
+                    counter: counter,
+                  )));
         } else {
           Navigator.push(
               context,
@@ -145,14 +289,14 @@ class Tile extends StatelessWidget {
                 children: [
                   Text(
                     action,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: Colors.black54,

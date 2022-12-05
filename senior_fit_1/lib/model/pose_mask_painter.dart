@@ -19,7 +19,7 @@ class PoseMaskPainter extends CustomPainter {
     required this.mask,
     required this.imageSize,
   }) {
-    flutterTts.setLanguage('en');
+    flutterTts.setLanguage('ko');
     flutterTts.setSpeechRate(0.4);
   }
 
@@ -45,7 +45,6 @@ class PoseMaskPainter extends CustomPainter {
 
   void _paintPose(Canvas canvas, Size size) {
     if (pose == null) return;
-
     final double hRatio =
     imageSize.width == 0 ? 1 : size.width / imageSize.width;
     final double vRatio =
@@ -54,48 +53,48 @@ class PoseMaskPainter extends CustomPainter {
     offsetForPart(PoseLandmark part) =>
         Offset(part.position.x * hRatio, part.position.y * vRatio);
 
-    var myList = [];
-// calculate angles from three points
-    final angleLandmarksByType = {
-      for (final it in pose!.landmarks) it.type: it
-    };
-
-    for (final angle in angles) {
-      final leftShoulder = offsetForPart(angleLandmarksByType[angle[0]]!);
-      final leftElbow = offsetForPart(angleLandmarksByType[angle[1]]!);
-      final leftWrist = offsetForPart(angleLandmarksByType[angle[2]]!);
-      var hipAngles =
-          (atan2((leftWrist.dy - leftElbow.dy), (leftWrist.dx - leftElbow.dx)) -
-              atan2((leftShoulder.dy - leftElbow.dy),
-                  (leftShoulder.dx - leftElbow.dx)))
-              .abs() *
-              (180 / pi);
-      if (hipAngles > 180) {
-        hipAngles = 360 - hipAngles;
-      }
-
-      TextSpan span = TextSpan(
-        text: hipAngles.toStringAsFixed(2),
-        style: const TextStyle(
-          color: Color.fromARGB(255, 255, 0, 43),
-          fontSize: 18,
-          //shadows: [
-          // ui.Shadow(
-          //color: Color.fromRGBO(255, 255, 255, 1),
-          // offset: Offset(1, 1),
-          // blurRadius: 1,
-          // ),
-          // ],
-        ),
-      );
-      TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left);
-      tp.textDirection = TextDirection.ltr;
-      tp.layout();
-      tp.paint(canvas, leftElbow);
-
-      myList.add(hipAngles);
-      // print(hipAngles.toString());
-    }
+//     var myList = [];
+// // calculate angles from three points
+//     final angleLandmarksByType = {
+//       for (final it in pose!.landmarks) it.type: it
+//     };
+//
+//     for (final angle in angles) {
+//       final leftShoulder = offsetForPart(angleLandmarksByType[angle[0]]!);
+//       final leftElbow = offsetForPart(angleLandmarksByType[angle[1]]!);
+//       final leftWrist = offsetForPart(angleLandmarksByType[angle[2]]!);
+//       var hipAngles =
+//           (atan2((leftWrist.dy - leftElbow.dy), (leftWrist.dx - leftElbow.dx)) -
+//               atan2((leftShoulder.dy - leftElbow.dy),
+//                   (leftShoulder.dx - leftElbow.dx)))
+//               .abs() *
+//               (180 / pi);
+//       if (hipAngles > 180) {
+//         hipAngles = 360 - hipAngles;
+//       }
+//
+//       TextSpan span = TextSpan(
+//         text: hipAngles.toStringAsFixed(2),
+//         style: const TextStyle(
+//           color: Color.fromARGB(255, 255, 0, 43),
+//           fontSize: 18,
+//           //shadows: [
+//           // ui.Shadow(
+//           //color: Color.fromRGBO(255, 255, 255, 1),
+//           // offset: Offset(1, 1),
+//           // blurRadius: 1,
+//           // ),
+//           // ],
+//         ),
+//       );
+//       TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left);
+//       tp.textDirection = TextDirection.ltr;
+//       tp.layout();
+//       tp.paint(canvas, leftElbow);
+//
+//       myList.add(hipAngles);
+//       // print(hipAngles.toString());
+//     }
 
     // Landmark connections
     final landmarksByType = {for (final it in pose!.landmarks) it.type: it};
@@ -135,22 +134,12 @@ class PoseMaskPainter extends CustomPainter {
       // tp.paint(canvas, offsetForPart(part));
     }
     //Text(reps.toString());
-    inDownPosition(myList);
-    inUpPosition(myList);
-    print(reps);
-    print(downPosition);
-    print(upPosition);
+    // inDownPosition(myList);
+    // inUpPosition(myList);
+    // print(reps);
+    // print(downPosition);
+    // print(upPosition);
 
-  }
-
-  void _paintMask(Canvas canvas, Size size) {
-    if (mask == null) return;
-
-    canvas.drawImageRect(
-        mask!,
-        Rect.fromLTWH(0, 0, mask!.width.toDouble(), mask!.height.toDouble()),
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        maskPaint);
   }
 
   @override
@@ -160,28 +149,28 @@ class PoseMaskPainter extends CustomPainter {
         oldDelegate.imageSize != imageSize;
   }
 
-  List<List<PoseLandmarkType>> get angles => [
-    [
-      PoseLandmarkType.leftShoulder,
-      PoseLandmarkType.leftElbow,
-      PoseLandmarkType.leftWrist,
-    ],
-    [
-      PoseLandmarkType.rightHip,
-      PoseLandmarkType.rightKnee,
-      PoseLandmarkType.rightAnkle
-    ],
-    [
-      PoseLandmarkType.rightShoulder,
-      PoseLandmarkType.rightElbow,
-      PoseLandmarkType.rightWrist,
-    ],
-    [
-      PoseLandmarkType.leftHip,
-      PoseLandmarkType.leftKnee,
-      PoseLandmarkType.leftAnkle
-    ],
-  ];
+  // List<List<PoseLandmarkType>> get angles => [
+  //   [
+  //     PoseLandmarkType.leftShoulder,
+  //     PoseLandmarkType.leftElbow,
+  //     PoseLandmarkType.leftWrist,
+  //   ],
+  //   [
+  //     PoseLandmarkType.rightHip,
+  //     PoseLandmarkType.rightKnee,
+  //     PoseLandmarkType.rightAnkle
+  //   ],
+  //   [
+  //     PoseLandmarkType.rightShoulder,
+  //     PoseLandmarkType.rightElbow,
+  //     PoseLandmarkType.rightWrist,
+  //   ],
+  //   [
+  //     PoseLandmarkType.leftHip,
+  //     PoseLandmarkType.leftKnee,
+  //     PoseLandmarkType.leftAnkle
+  //   ],
+  // ];
 
   List<List<PoseLandmarkType>> get connections => [
     [PoseLandmarkType.leftEar, PoseLandmarkType.leftEyeOuter],
@@ -220,23 +209,23 @@ class PoseMaskPainter extends CustomPainter {
     [PoseLandmarkType.rightIndexFinger, PoseLandmarkType.rightPinkyFinger],
     [PoseLandmarkType.leftIndexFinger, PoseLandmarkType.leftPinkyFinger],
   ];
-
-  void inDownPosition(list) {
-    if (list[0] > 70 && list[0] < 100 && upPosition == true) {
-      downPosition = true;
-      upPosition = false;
-      flutterTts.speak('Up');
-    }
-  }
-
-  void inUpPosition(list) {
-    if (list[0] > 170 && list[0] < 180) {
-      if (downPosition == true) {
-        reps = reps + 1;
-        flutterTts.speak('Down');
-      }
-      downPosition = false;
-      upPosition = true;
-    }
-  }
+  //
+  // void inDownPosition(list) {
+  //   if (list[0] > 70 && list[0] < 100 && upPosition == true) {
+  //     downPosition = true;
+  //     upPosition = false;
+  //     flutterTts.speak('올려');
+  //   }
+  // }
+  //
+  // void inUpPosition(list) {
+  //   if (list[0] > 170 && list[0] < 180) {
+  //     if (downPosition == true) {
+  //       reps = reps + 1;
+  //       flutterTts.speak('내려');
+  //     }
+  //     downPosition = false;
+  //     upPosition = true;
+  //   }
+  // }
 }

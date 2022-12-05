@@ -39,6 +39,8 @@ PODS:
     - DKImagePickerController/PhotoGallery
     - Flutter
   - Flutter (1.0.0)
+  - flutter_beep (0.0.1):
+    - Flutter
   - flutter_inappwebview (0.0.1):
     - Flutter
     - flutter_inappwebview/Core (= 0.0.1)
@@ -139,18 +141,35 @@ PODS:
   - SDWebImage/Core (5.14.1)
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - sqlite3 (3.40.0):
+    - sqlite3/common (= 3.40.0)
+  - sqlite3/common (3.40.0)
+  - sqlite3/fts5 (3.40.0):
+    - sqlite3/common
+  - sqlite3/perf-threadsafe (3.40.0):
+    - sqlite3/common
+  - sqlite3/rtree (3.40.0):
+    - sqlite3/common
+  - sqlite3_flutter_libs (0.0.1):
+    - Flutter
+    - sqlite3 (~> 3.40.0)
+    - sqlite3/fts5
+    - sqlite3/perf-threadsafe
+    - sqlite3/rtree
   - SwiftyGif (5.4.3)
 
 DEPENDENCIES:
   - body_detection (from `.symlinks/plugins/body_detection/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
+  - flutter_beep (from `.symlinks/plugins/flutter_beep/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
 
 SPEC REPOS:
   trunk:
@@ -176,6 +195,7 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - SDWebImage
+    - sqlite3
     - SwiftyGif
 
 EXTERNAL SOURCES:
@@ -185,6 +205,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
+  flutter_beep:
+    :path: ".symlinks/plugins/flutter_beep/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_tts:
@@ -197,6 +219,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  sqlite3_flutter_libs:
+    :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
 
 SPEC CHECKSUMS:
   body_detection: ec8d077166ec7c1b092d133553ff964eaff7a45e
@@ -204,6 +228,7 @@ SPEC CHECKSUMS:
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_beep: 54fb393b22dfa0f0e4573c81b1c74dd71c4e5af8
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
@@ -230,6 +255,8 @@ SPEC CHECKSUMS:
   Protobuf: 02524ec14183fe08fb259741659e79683788158b
   SDWebImage: e1b3c38f170c6100130fce6856e423ed9e5f4fce
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  sqlite3: 88dd99ef4ac3945f5a15facdd752933c52fd93bf
+  sqlite3_flutter_libs: c00751e981228acb63595236703da79d31282b63
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
 
 PODFILE CHECKSUM: 427e6cf11e71c40dc811227e0b517c40ea372696
