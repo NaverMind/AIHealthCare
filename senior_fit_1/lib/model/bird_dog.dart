@@ -287,34 +287,68 @@ class BirdDogPainter extends CustomPainter {
   make_posevector(){
     Score2();
     Map pose_dict = make_pose_list();
-    List<double> pose_vector_con1 = [
+    List<double> pose_vector_con1_LEFT = [
       pose_dict['LEFT_HIP']['x'],pose_dict['LEFT_HIP']['y'],
       pose_dict['LEFT_SHOULDER']['x'],pose_dict['LEFT_SHOULDER']['y'],
       pose_dict['LEFT_ELBOW']['x'],pose_dict['LEFT_ELBOW']['y']];
-    List<double> pose_vector_con2 = [
+    List<double> pose_vector_con2_LEFT = [
       pose_dict['RIGHT_ELBOW']['x'],pose_dict['RIGHT_ELBOW']['y'],
       pose_dict['RIGHT_SHOULDER']['x'],pose_dict['RIGHT_SHOULDER']['y'],
       pose_dict['RIGHT_HIP']['x'],pose_dict['RIGHT_HIP']['y']];
-    List<double> pose_vector_con3 = [
+    List<double> pose_vector_con3_LEFT = [
       pose_dict['LEFT_SHOULDER']['x'],pose_dict['LEFT_SHOULDER']['y'],
       pose_dict['LEFT_HIP']['x'],pose_dict['LEFT_HIP']['y'],
       pose_dict['LEFT_KNEE']['x'],pose_dict['LEFT_KNEE']['y']];
-    List<double> pose_vector_con4 = [
-      pose_dict['RIGHT_HIP']['x'],pose_dict['LEFT_HIP']['y'],
+    List<double> pose_vector_con4_LEFT = [
+      pose_dict['RIGHT_HIP']['x'],pose_dict['RIGHT_HIP']['y'],
       pose_dict['RIGHT_KNEE']['x'],pose_dict['RIGHT_KNEE']['y'],
       pose_dict['RIGHT_ANKLE']['x'],pose_dict['RIGHT_ANKLE']['y']];
-    List<double> pose_vector_con5 = [
+    List<double> pose_vector_con5_LEFT = [
       pose_dict['RIGHT_SHOULDER']['x'],pose_dict['RIGHT_SHOULDER']['y'],
       pose_dict['RIGHT_HIP']['x'],pose_dict['RIGHT_HIP']['y'],
       pose_dict['RIGHT_KNEE']['x'],pose_dict['RIGHT_KNEE']['y']];
 
+    List<double> pose_vector_con1_RIGHT = [
+      pose_dict['RIGHT_HIP']['x'],pose_dict['RIGHT_HIP']['y'],
+      pose_dict['RIGHT_SHOULDER']['x'],pose_dict['RIGHT_SHOULDER']['y'],
+      pose_dict['RIGHT_ELBOW']['x'],pose_dict['RIGHT_ELBOW']['y']];
+    List<double> pose_vector_con2_RIGHT = [
+      pose_dict['LEFT_ELBOW']['x'],pose_dict['LEFT_ELBOW']['y'],
+      pose_dict['LEFT_SHOULDER']['x'],pose_dict['LEFT_SHOULDER']['y'],
+      pose_dict['LEFT_HIP']['x'],pose_dict['LEFT_HIP']['y']];
+    List<double> pose_vector_con3_RIGHT = [
+      pose_dict['RIGHT_SHOULDER']['x'],pose_dict['RIGHT_SHOULDER']['y'],
+      pose_dict['RIGHT_HIP']['x'],pose_dict['RIGHT_HIP']['y'],
+      pose_dict['RIGHT_KNEE']['x'],pose_dict['RIGHT_KNEE']['y']];
+    List<double> pose_vector_con4_RIGHT= [
+      pose_dict['LEFT_HIP']['x'],pose_dict['LEFT_HIP']['y'],
+      pose_dict['LEFT_KNEE']['x'],pose_dict['LEFT_KNEE']['y'],
+      pose_dict['LEFT_ANKLE']['x'],pose_dict['LEFT_ANKLE']['y']];
+    List<double> pose_vector_con5_RIGHT = [
+      pose_dict['LEFT_SHOULDER']['x'],pose_dict['LEFT_SHOULDER']['y'],
+      pose_dict['LEFT_HIP']['x'],pose_dict['LEFT_HIP']['y'],
+      pose_dict['LEFT_KNEE']['x'],pose_dict['LEFT_KNEE']['y']];
+
     //힙으뜸자세 오른쪽 팔
+    List<double> real_con1_right = [0.0, 1.0, 0.43916029848907084, 0.32578778610777837, 0.5807761865479122, 0.0];
+    List<double> real_con2_right = [0.0, 0.0, 0.7924870005109855, 0.02032039976055603, 0.6483995898921346, 1.0];
+    List<double> real_con3_right = [1.0, 0.0, 0.6770242282937585, 0.5333019032160113, 0.0, 0.5073326609256421];
+    List<double> real_con4_right = [0.013352855104302919, 0.0, 0.0, 0.5472703377011708, 0.05665522413513828, 1.0];
+    List<double> real_con5_right = [0.07341007872482601, 0.0, 0.013577887569106776, 0.5539346700597846, 0.0, 1.0];
+
+    /*
     List<double> real_con1_right = [0.07204439887690385, 1.0, 0.08805411116788729, 0.02032039976055603, 0.0, 0.0];
     List<double> real_con2_right = [0.06453068739421246, 0.0, 0.048795588721007865, 0.3257877861077783, 0.0, 1.0];
     List<double> real_con3_right = [0.008156675413869555, 0.0, 0.0015086541743451972, 0.5539346700597847, 0.0, 1.0];
     List<double> real_con4_right = [0.1240939814744175, 0.07082222592801524, 0.0, 0.0, 0.0030040995120189603, 1.0];
     List<double> real_con5_right = [0.20834561144647953, 0.0, 0.14105502680794407, 1.0, 0.0, 0.9513048010259012];
-
+     */
+    //힙으뜸자세 왼쪽 팔
+    List<double> real_con1_left = [0.0, 1.0, 0.05057359356599181, 0.34742252385442013, 0.05312386186619672, 0.0];
+    List<double> real_con2_left = [0.0, 0.06088685501667359, 0.09373270567175221, 0.0, 0.05717715558490038, 1.0];
+    List<double> real_con3_left = [0.2285968150850118, 0.0, 0.15212330158781667, 1.0, 0.0, 0.9651174598918825];
+    List<double> real_con4_left = [0.00036808633445471414, 0.0, 0.0, 0.5192919969661617, 0.013906074442597751, 1.0];
+    List<double> real_con5_left = [0.017117694999985417, 0.0, 0.00036368590161561164, 0.5854244053277925, 0.0, 1.0];
 
 
     /*
@@ -326,29 +360,7 @@ class BirdDogPainter extends CustomPainter {
     List<double> real_con5_right = [1.0, 0.0, 0.41416232866859015, 0.08880579319335045, 0.0, 0.23201995241789458];
      */
 
-    //힙으뜸자세 왼쪽 팔
-    List<double> real_con1_left = [0.0, 1.0, 0.05057359356599181, 0.34742252385442013, 0.05312386186619672, 0.0];
-    List<double> real_con2_left = [0.0, 0.06088685501667359, 0.09373270567175221, 0.0, 0.05717715558490038, 1.0];
-    List<double> real_con3_left = [0.2285968150850118, 0.0, 0.15212330158781667, 1.0, 0.0, 0.9651174598918825];
-    List<double> real_con4_left = [0.00036808633445471414, 0.0, 0.0, 0.5192919969661617, 0.013906074442597751, 1.0];
-    List<double> real_con5_left = [0.017117694999985417, 0.0, 0.00036368590161561164, 0.5854244053277925, 0.0, 1.0];
 
-    double ang_1_right = dif_angle(pose_vector_con1,real_con1_right);
-    double ang_2_right = dif_angle(pose_vector_con2,real_con2_right);
-    double ang_3_right = dif_angle(pose_vector_con3,real_con3_right);
-    double ang_4_right = dif_angle(pose_vector_con4,real_con4_right);
-    double ang_5_right = dif_angle(pose_vector_con5,real_con5_right);
-
-    double ang_1_left = dif_angle(pose_vector_con1,real_con1_left);
-    double ang_2_left = dif_angle(pose_vector_con2,real_con2_left);
-    double ang_3_left = dif_angle(pose_vector_con3,real_con3_left);
-    double ang_4_left = dif_angle(pose_vector_con4,real_con4_left);
-    double ang_5_left = dif_angle(pose_vector_con5,real_con5_left);
-
-    double left_sum = 0;
-    double right_sum = 0;
-    left_sum = ang_1_left + ang_2_left+ ang_3_left+ ang_4_left+ ang_5_left;
-    right_sum = ang_1_right+ang_2_right+ang_3_right+ang_4_right+ang_5_right;
 
 
     double ang_1 = 0;
@@ -362,13 +374,24 @@ class BirdDogPainter extends CustomPainter {
     List<double> real_con3 = [];
     List<double> real_con4 = [];
     List<double> real_con5 = [];
-    if(left_sum<right_sum){
-      isLeft = true;
-      ang_1 = ang_1_left;
-      ang_2 = ang_2_left;
-      ang_3 = ang_3_left;
-      ang_4 = ang_4_left;
-      ang_5 = ang_5_left;
+
+    if(pose_dict['LEFT_ANKLE']['x']>pose_dict['RIGHT_ANKLE']['x']){
+      isLeft = false;
+    }
+    else isLeft = true;
+
+    List<double> pose_vector_con1 = [];
+    List<double> pose_vector_con2 = [];
+    List<double> pose_vector_con3 = [];
+    List<double> pose_vector_con4 = [];
+    List<double> pose_vector_con5 = [];
+
+    if(isLeft){
+      ang_1 = dif_angle(pose_vector_con1_LEFT, real_con1_left);
+      ang_2 = dif_angle(pose_vector_con2_LEFT, real_con2_left);
+      ang_3 = dif_angle(pose_vector_con3_LEFT, real_con3_left);
+      ang_4 = dif_angle(pose_vector_con4_LEFT, real_con4_left);
+      ang_5 = dif_angle(pose_vector_con5_LEFT, real_con5_left);
 
       real_con1 = real_con1_left;
       real_con2 = real_con2_left;
@@ -376,20 +399,30 @@ class BirdDogPainter extends CustomPainter {
       real_con4 = real_con4_left;
       real_con5 = real_con5_left;
 
+      pose_vector_con1 = pose_vector_con1_LEFT;
+      pose_vector_con2 = pose_vector_con2_LEFT;
+      pose_vector_con3 = pose_vector_con3_LEFT;
+      pose_vector_con4 = pose_vector_con4_LEFT;
+      pose_vector_con5 = pose_vector_con5_LEFT;
     }
     else{
-      isLeft = false;
-      ang_1 = ang_1_right;
-      ang_2 = ang_2_right;
-      ang_3 = ang_3_right;
-      ang_4 = ang_4_right;
-      ang_5 = ang_5_right;
+      ang_1 = dif_angle(pose_vector_con1_RIGHT, real_con1_right);
+      ang_2 = dif_angle(pose_vector_con2_RIGHT, real_con2_right);
+      ang_3 = dif_angle(pose_vector_con3_RIGHT, real_con3_right);
+      ang_4 = dif_angle(pose_vector_con4_RIGHT, real_con4_right);
+      ang_5 = dif_angle(pose_vector_con5_RIGHT, real_con5_right);
 
       real_con1 = real_con1_right;
       real_con2 = real_con2_right;
       real_con3 = real_con3_right;
       real_con4 = real_con4_right;
       real_con5 = real_con5_right;
+
+      pose_vector_con1 = pose_vector_con1_RIGHT;
+      pose_vector_con2 = pose_vector_con2_RIGHT;
+      pose_vector_con3 = pose_vector_con3_RIGHT;
+      pose_vector_con4 = pose_vector_con4_RIGHT;
+      pose_vector_con5 = pose_vector_con5_RIGHT;
     }
 
     pose_vector_con1 = imgResize(pose_vector_con1, 200, 600);
@@ -409,6 +442,17 @@ class BirdDogPainter extends CustomPainter {
     print(pose_vector_con4);
     print("pose_vector_con5");
     print(pose_vector_con5);
+
+    print("real_con");
+    print(real_con1);
+    print("real_con");
+    print(real_con2);
+    print("real_con");
+    print(real_con3);
+    print("real_con");
+    print(real_con4);
+    print("real_con");
+    print(real_con5);
 
 
     pose_vector_con1 = normalization(pose_vector_con1);
@@ -430,6 +474,9 @@ class BirdDogPainter extends CustomPainter {
     double score3 = ans_con3*50 + ang_3;
     double score4 = ans_con4*50 + ang_4;
     double score5 = ans_con5*50 + ang_5;
+
+    print("왼쪽팔입니까?");
+    print(isLeft);
 
     print("num1");
     print("------------------------");
@@ -494,7 +541,7 @@ class BirdDogPainter extends CustomPainter {
     //최악이 threshold보다 낮으면 훌륭한 자세
     if(max<threshold) max_score = -1;
 
-    if(max>100) max_score = -2;
+    if(max>120) max_score = -2;
 
 
 
@@ -502,35 +549,7 @@ class BirdDogPainter extends CustomPainter {
     String part = "NONE";
     int feedback_score = -1;
     //feedback
-    if(isLeft){
-      if(max_score== -2) {
-        feedback = "프레임 안에서 정확한 자세를 취해주세요.";
-      }
-      else if(max_score == -1){
-        feedback = "훌륭한 자세입니다!";
-      }
-      else if(max_score == 0){
-        feedback = "왼쪽 팔을 앞으로 쭉 뻗어주세요!";
-        part = "왼쪽 팔";
-      }
-      else if(max_score == 1){
-        feedback = "오른쪽 손을 어깨 아래에 놓아주세요!";
-        part = "오른쪽 팔";
-      }
-      else if(max_score == 2){
-        feedback = "왼쪽 다리는 지면과 90도로 만들어주세요!";
-        part = "왼쪽 다리";
-      }
-      else if(max_score == 3){
-        feedback = "오른쪽 다리를 일자로 쭉 뻗어주세요!";
-        part = "오른쪽 다리";
-      }
-      else if(max_score == 4){
-        feedback = "오른쪽 다리를 골반 높이까지만 들어주세요!";
-        part = "오른쪽 다리";
-      }
-    }
-    else{
+    if(isLeft){ //피드백은 오른쪽을 해줘
       if(max_score== -2) {
         feedback = "프레임 안에서 정확한 자세를 취해주세요.";
       }
@@ -558,9 +577,35 @@ class BirdDogPainter extends CustomPainter {
         part = "왼쪽 다리";
       }
     }
-
-
-    feedback = feedback + "       다음 자세 준비!";
+    else{
+      if(max_score== -2) {
+        feedback = "프레임 안에서 정확한 자세를 취해주세요.";
+      }
+      else if(max_score == -1){
+        feedback = "훌륭한 자세입니다!";
+      }
+      else if(max_score == 0){
+        feedback = "왼쪽 팔을 앞으로 쭉 뻗어주세요!";
+        part = "왼쪽 팔";
+      }
+      else if(max_score == 1){
+        feedback = "오른쪽 손을 어깨 아래에 놓아주세요!";
+        part = "오른쪽 팔";
+      }
+      else if(max_score == 2){
+        feedback = "왼쪽 다리는 지면과 90도로 만들어주세요!";
+        part = "왼쪽 다리";
+      }
+      else if(max_score == 3){
+        feedback = "오른쪽 다리를 일자로 쭉 뻗어주세요!";
+        part = "오른쪽 다리";
+      }
+      else if(max_score == 4){
+        feedback = "오른쪽 다리를 골반 높이까지만 들어주세요!";
+        part = "오른쪽 다리";
+      }
+    }
+    feedback = feedback + ".       반대 방향 준비!";
     print("max:--------");
     print(max);
     getMax(max, score_sum, threshold, part, feedback);

@@ -61,15 +61,15 @@ class _DetectPageState extends State<DetectPage> {
 
   /// 실험 변수 설정========================================
   void settingForExp(){
-    if(widget.actionname == '사이드 크런치'){
-      readyBeepTermMillisecond = 1000;
+    if (widget.actionname == '사이드 크런치') {
+      readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
-      inScoringTimeMillisecond = 1000;
+      inScoringTimeMillisecond = 500;
       ttsSetSpeechRate = 0.5;
       youziSoundOn = false;
       jongRoSoundOn = false;
-      breakTimeOn = false;
-      breakTimeMillisecond = 0;
+      breakTimeOn = true;
+      breakTimeMillisecond = 2500;
     }else if(widget.actionname == '버드독'){
       readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
