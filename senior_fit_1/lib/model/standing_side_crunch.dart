@@ -161,6 +161,16 @@ class StandingSideCrunchPainter extends CustomPainter {
     "left_spine": "척추를 좀 더 펴주세요!",
     "right_spine": "척추를 좀 더 펴주세요!"
   };
+  final Map<String, String> part = {
+    "left_knee_elbow": "왼쪽 무릎과 팔꿈치 거리",
+    "right_knee_elbow": "오른쪽 무릎과 팔꿈치 거리",
+    "left_body_knee": "왼쪽 무릎",
+    "right_body_knee": "오른쪽 무릎",
+    "left_elbow": "왼쪽 팔",
+    "right_elbow": "오른쪽 팔",
+    "left_spine": "척추",
+    "right_spine": "척추"
+  };
 
   StandingSideCrunchPainter({
     required this.pose,
@@ -575,16 +585,10 @@ class StandingSideCrunchPainter extends CustomPainter {
         score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
                 20 +
             weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 80;
-        print(
-            "********************************************************************");
-        print("현재 포인트 좌표 list : ${pointList[idx]}");
-        print(
-            '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])} // 점수 : ${100 - score}');
       } else {
         score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
                 50 +
             weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 50;
-        print('Score : ${100 - score}');
       }
       score = 100 - score;
       idx += 2;
@@ -595,8 +599,6 @@ class StandingSideCrunchPainter extends CustomPainter {
     }
     score_sum /= 4;
     getMax(score_list, score_sum, threshold, feedback_key, sideCrunchCommand);
-    print(
-        "-------------------------------------------------------------------------------------------------------------------------------------------");
   }
 
   /// 저장할 값 parameter에 넣어준다.
@@ -617,7 +619,8 @@ class StandingSideCrunchPainter extends CustomPainter {
       }
       prefs.setDouble('score_sum', score_sum);
       prefs.setDouble('score', score_list[idx]);
-      prefs.setString('part', key[idx]);
+      prefs.setString('part', part[key[idx]]!);
+
       // 스코어가 제일 낮은 값의 자세가 threshold보다 작거나 같으면 그 부위에 대한 피드백 해줌.
       if (score_list[idx] <= threshold)
         prefs.setString('feedback', sideCrunchCommand[key[idx]]!);
