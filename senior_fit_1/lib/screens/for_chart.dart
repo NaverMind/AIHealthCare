@@ -1,20 +1,88 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '../database/drift_database.dart';
 
 class LineChartSample2 extends StatefulWidget {
-  const LineChartSample2({super.key});
+  final String actionName;
+
+  const LineChartSample2({super.key, required this.actionName});
 
   @override
   State<LineChartSample2> createState() => _LineChartSample2State();
 }
 
 class _LineChartSample2State extends State<LineChartSample2> {
+  List<FlSpot> spotList = [
+    FlSpot(0, 0),
+    FlSpot(1, 0),
+    FlSpot(2, 0),
+    FlSpot(3, 0),
+    FlSpot(4, 0),
+    FlSpot(5, 0),
+    FlSpot(6, 0),
+  ];
+  List<List<int>> spotTemp = [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ];
+
   List<Color> gradientColors = [
-    const Color(0xff7209B7),
+    const Color(0xffe1c4f5),
     const Color(0xff7209B7),
   ];
 
   bool showAvg = false;
+
+  void readDatabase() async {
+    final data = await GetIt.I<LocalDatabase>()
+        .watchFeedbackScoresAct(widget.actionName);
+    print(data);
+
+    DateTime today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+
+    for (var element in data) {
+      print(element);
+
+      int diff = today.difference(element.createdAt).inDays;
+      print("diff : $diff");
+      if (diff < 7) {
+        spotTemp[diff][1] = (spotTemp[diff][1] + element.score);
+        spotTemp[diff][0]++;
+      }
+    }
+    print('${widget.actionName}=============');
+    print(spotTemp);
+    print('=============');
+    setState((){
+      spotList = [
+        FlSpot(0, spotTemp[6][0] != 0 ? ((spotTemp[6][1]~/spotTemp[6][0])).toDouble() : 0),
+        FlSpot(1, spotTemp[5][0] != 0 ? ((spotTemp[5][1]~/spotTemp[5][0])).toDouble(): 0),
+        FlSpot(2, spotTemp[4][0] != 0 ? ((spotTemp[4][1]~/spotTemp[4][0])).toDouble(): 0),
+        FlSpot(3, spotTemp[3][0] != 0 ? ((spotTemp[3][1]~/spotTemp[3][0])).toDouble(): 0),
+        FlSpot(4, spotTemp[2][0] != 0 ? ((spotTemp[2][1]~/spotTemp[2][0])).toDouble(): 0),
+        FlSpot(5, spotTemp[1][0] != 0 ? ((spotTemp[1][1]~/spotTemp[1][0])).toDouble(): 0),
+        FlSpot(6, spotTemp[0][0] != 0 ? ((spotTemp[0][1]~/spotTemp[0][0])).toDouble(): 0),
+      ];
+    });
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +95,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
               borderRadius: const BorderRadius.all(
                 Radius.circular(18),
               ),
-              color: const Color(0xffe4def5),
+              color: const Color(0xffF8F7FB),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.7),
@@ -45,7 +113,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
                 bottom: 12,
               ),
               child: LineChart(
-                showAvg ? avgData() : mainData(),
+                mainData(),
               ),
             ),
           ),
@@ -105,10 +173,10 @@ class _LineChartSample2State extends State<LineChartSample2> {
       case 0:
         text = '0';
         break;
-      case 5:
+      case 50:
         text = '50';
         break;
-      case 10:
+      case 100:
         text = '100';
         break;
       default:
@@ -165,118 +233,19 @@ class _LineChartSample2State extends State<LineChartSample2> {
       ),
       borderData: FlBorderData(
         show: false,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border.all(color: const Color(0xffc1aff5)),
       ),
       minX: 0,
       maxX: 6,
       minY: 0,
-      maxY: 10,
+      maxY: 100,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(1, 4),
-            FlSpot(2, 7),
-            FlSpot(3, 9),
-            FlSpot(4, 7),
-            FlSpot(5, 2),
-            FlSpot(6, 7),
-          ],
+          preventCurveOverShooting: true,
+          spots: spotList,
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: true,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withOpacity(0))
-                  .toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xffffffff)),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(1, 3.44),
-            FlSpot(2, 3.44),
-            FlSpot(3, 3.44),
-            FlSpot(4, 3.44),
-            FlSpot(5, 3.44),
-            FlSpot(6, 3.44),
-          ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-            ],
           ),
           barWidth: 5,
           isStrokeCapRound: true,
@@ -286,14 +255,8 @@ class _LineChartSample2State extends State<LineChartSample2> {
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
+              colors:
+                  gradientColors.map((color) => color.withOpacity(0)).toList(),
             ),
           ),
         ),

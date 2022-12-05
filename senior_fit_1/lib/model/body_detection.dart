@@ -19,10 +19,12 @@ import 'package:senior_fit_1/model/bird_dog.dart';
 
 class DetectPage extends StatefulWidget {
   final String actionname;
+  final int counter;
 
   DetectPage({
     Key? key,
     required this.actionname,
+    required this.counter,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,8 @@ class _DetectPageState extends State<DetectPage> {
   bool isActiveStart = false;
   bool isInFeedbackTime = false;
   late DateTime startTime;
+  int thisCounter = 0;
+
   /// 실험 변수 기본 값..수정 x
   int readyBeepTermMillisecond = 1000;
   int readyBeepCount = 3;
@@ -60,8 +64,8 @@ class _DetectPageState extends State<DetectPage> {
   int breakTimeMillisecond = 0;
 
   /// 실험 변수 설정========================================
-  void settingForExp(){
-    if(widget.actionname == '사이드 크런치'){
+  void settingForExp() {
+    if (widget.actionname == '사이드 크런치') {
       readyBeepTermMillisecond = 1000;
       readyBeepCount = 3;
       inScoringTimeMillisecond = 1000;
@@ -70,7 +74,7 @@ class _DetectPageState extends State<DetectPage> {
       jongRoSoundOn = false;
       breakTimeOn = false;
       breakTimeMillisecond = 0;
-    }else if(widget.actionname == '버드독'){
+    } else if (widget.actionname == '버드독') {
       readyBeepTermMillisecond = 1000;
       readyBeepCount = 3;
       inScoringTimeMillisecond = 5000;
@@ -81,6 +85,7 @@ class _DetectPageState extends State<DetectPage> {
       breakTimeMillisecond = 5000;
     }
   }
+
   /// ===================================================
 
   _loadPrefs() async {
@@ -108,20 +113,20 @@ class _DetectPageState extends State<DetectPage> {
         setState(() {
           isInFeedbackTime = true;
         });
-        if(youziSoundOn) {
+        if (youziSoundOn) {
           flutterTts.speak('유지');
         }
-
       } else {
         if (isInFeedbackTime) {
-          if(jongRoSoundOn){
+          if (jongRoSoundOn) {
             flutterTts.speak('종료');
-          }else{
+          } else {
             FlutterBeep.beep(false);
           }
           String? feedbackStr = prefs.getString('feedback');
           if (feedbackStr != '') {
             flutterTts.speak(feedbackStr!);
+            thisCounter++;
             // TODO: db에 저장 필요.
             // active name, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
             final keyValue = await GetIt.I<LocalDatabase>().createFeedbackScore(
@@ -141,9 +146,20 @@ class _DetectPageState extends State<DetectPage> {
           setState(() {
             isInFeedbackTime = false;
           });
-        }else{
+        } else {
           FlutterBeep.beep(false);
         }
+      }
+      if(thisCounter == widget.counter){
+        _stopCameraStream();
+        // Navigator.pop(context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ResultPage(
+                  actionname: widget.actionname,
+                  startTime: startTime,
+                )));
       }
     });
   }
@@ -193,16 +209,15 @@ class _DetectPageState extends State<DetectPage> {
     int cntTemp = 0;
     bool isFirst = true;
     while (true) {
-      if(cntTemp == 0){
+      if (cntTemp == 0) {
         cntTemp++;
-        if(isFirst){
+        if (isFirst) {
           isFirst = false;
           continue;
         }
         yield false;
         await Future.delayed(Duration(milliseconds: breakTimeMillisecond));
-
-      } else if (cntTemp < readyBeepCount+1) {
+      } else if (cntTemp < readyBeepCount + 1) {
         cntTemp++;
         yield false;
         await Future.delayed(Duration(

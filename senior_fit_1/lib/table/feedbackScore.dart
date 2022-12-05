@@ -16,6 +16,10 @@ class FeedbackScores extends Table {
 
   // row 생성날짜
   DateTimeColumn get createdAt => dateTime().clientDefault(
-        () => DateTime.now(),
+        () => DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ),
       )();
 }

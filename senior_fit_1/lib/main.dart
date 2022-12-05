@@ -48,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int selectedPos = 1;
 
-  double bottomNavBarHeight = 60;
+  double bottomNavBarHeight = 70;
 
   List<TabItem> tabItems = List.of([
     TabItem(

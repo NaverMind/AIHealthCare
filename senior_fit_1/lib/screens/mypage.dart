@@ -35,56 +35,58 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    decoration: const BoxDecoration(
-                      color: Colors.deepPurple,
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffEDEDED),
-                    ),
-                  ),
-                ],
-              ),
-              Center(
-                child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xff480CA8),
+        elevation: 0,
+        title: const Text(
+          'My page',
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Color(0xff480CA8),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Column(
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
-                    const Text(
-                      'My page',
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      decoration: const BoxDecoration(
+                        color: Color(0xff480CA8),
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.08,
-                    ),
                     Container(
+                      width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.2,
+                      decoration: const BoxDecoration(
+                        color: Color(0xffEDEDED),
+                      ),
+                    ),
+                  ],
+                ),
+                Center(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: Center(
+                        child: Container(
+                      height: MediaQuery.of(context).size.height * 0.22,
                       width: MediaQuery.of(context).size.width * 0.9,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.white,
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -96,7 +98,7 @@ class _MyPageState extends State<MyPage> {
                                   backgroundImage: AssetImage(
                                     'images/default_profile_img.png',
                                   ),
-                                  radius: 33,
+                                  radius: 25,
                                 ),
                                 const SizedBox(
                                   width: 20,
@@ -112,7 +114,8 @@ class _MyPageState extends State<MyPage> {
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                const Icon( // TODO: 수정 기능 구현
+                                const Icon(
+                                  // TODO: 수정 기능 구현
                                   Icons.brush_outlined,
                                   color: Colors.grey,
                                   size: 18,
@@ -201,22 +204,26 @@ class _MyPageState extends State<MyPage> {
                               ),
                             ],
                           ),
+                          SizedBox(
+                            height: 10,
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.53,
-            decoration: const BoxDecoration(
-              color: Colors.white,
+                    )),
+                  ),
+                )
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
