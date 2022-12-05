@@ -154,8 +154,8 @@ class StandingSideCrunchPainter extends CustomPainter {
   final Map<String, String> sideCrunchCommand = {
     "left_knee_elbow": "왼쪽 팔꿈치와 무릎을 더 붙이세요!",
     "right_knee_elbow": "오른쪽 팔꿈치와 무릎을 더 붙이세요!",
-    "left_body_knee": "왼쪽 무릎을 조금 더 측면으로 옮겨주세요!",
-    "right_body_knee": "오른쪽 무릎을 조금 더 측면으로 옮겨주세요!",
+    "left_body_knee": "왼쪽 무릎을 측면으로 옮겨주세요!",
+    "right_body_knee": "오른쪽 무릎을 측면으로 옮겨주세요!",
     "left_elbow": "왼손을 머리뒤에 위치해주세요!",
     "right_elbow": "오른손을 머리뒤에 위치해주세요!",
     "left_spine": "척추를 좀 더 펴주세요!",
@@ -197,9 +197,9 @@ class StandingSideCrunchPainter extends CustomPainter {
     if (pose == null) return;
 
     final double hRatio =
-        imageSize.width == 0 ? 1 : size.width / imageSize.width;
+    imageSize.width == 0 ? 1 : size.width / imageSize.width;
     final double vRatio =
-        imageSize.height == 0 ? 1 : size.height / imageSize.height;
+    imageSize.height == 0 ? 1 : size.height / imageSize.height;
 
     offsetForPart(PoseLandmark part) =>
         Offset(part.position.x * hRatio, part.position.y * vRatio);
@@ -232,42 +232,42 @@ class StandingSideCrunchPainter extends CustomPainter {
   }
 
   List<List<PoseLandmarkType>> get connections => [
-        [PoseLandmarkType.leftEar, PoseLandmarkType.leftEyeOuter],
-        [PoseLandmarkType.leftEyeOuter, PoseLandmarkType.leftEye],
-        [PoseLandmarkType.leftEye, PoseLandmarkType.leftEyeInner],
-        [PoseLandmarkType.leftEyeInner, PoseLandmarkType.nose],
-        [PoseLandmarkType.nose, PoseLandmarkType.rightEyeInner],
-        [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEye],
-        [PoseLandmarkType.rightEye, PoseLandmarkType.rightEyeOuter],
-        [PoseLandmarkType.rightEyeOuter, PoseLandmarkType.rightEar],
-        [PoseLandmarkType.mouthLeft, PoseLandmarkType.mouthRight],
-        [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-        [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
-        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
-        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightElbow],
-        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightThumb],
-        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightIndexFinger],
-        [PoseLandmarkType.rightWrist, PoseLandmarkType.rightPinkyFinger],
-        [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-        [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-        [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-        [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
-        [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-        [PoseLandmarkType.leftElbow, PoseLandmarkType.leftShoulder],
-        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftElbow],
-        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftThumb],
-        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftIndexFinger],
-        [PoseLandmarkType.leftWrist, PoseLandmarkType.leftPinkyFinger],
-        [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftHeel],
-        [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftToe],
-        [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightHeel],
-        [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightToe],
-        [PoseLandmarkType.rightHeel, PoseLandmarkType.rightToe],
-        [PoseLandmarkType.leftHeel, PoseLandmarkType.leftToe],
-        [PoseLandmarkType.rightIndexFinger, PoseLandmarkType.rightPinkyFinger],
-        [PoseLandmarkType.leftIndexFinger, PoseLandmarkType.leftPinkyFinger],
-      ];
+    [PoseLandmarkType.leftEar, PoseLandmarkType.leftEyeOuter],
+    [PoseLandmarkType.leftEyeOuter, PoseLandmarkType.leftEye],
+    [PoseLandmarkType.leftEye, PoseLandmarkType.leftEyeInner],
+    [PoseLandmarkType.leftEyeInner, PoseLandmarkType.nose],
+    [PoseLandmarkType.nose, PoseLandmarkType.rightEyeInner],
+    [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEye],
+    [PoseLandmarkType.rightEye, PoseLandmarkType.rightEyeOuter],
+    [PoseLandmarkType.rightEyeOuter, PoseLandmarkType.rightEar],
+    [PoseLandmarkType.mouthLeft, PoseLandmarkType.mouthRight],
+    [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+    [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
+    [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
+    [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightElbow],
+    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightThumb],
+    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightIndexFinger],
+    [PoseLandmarkType.rightWrist, PoseLandmarkType.rightPinkyFinger],
+    [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+    [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+    [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+    [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+    [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+    [PoseLandmarkType.leftElbow, PoseLandmarkType.leftShoulder],
+    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftElbow],
+    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftThumb],
+    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftIndexFinger],
+    [PoseLandmarkType.leftWrist, PoseLandmarkType.leftPinkyFinger],
+    [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftHeel],
+    [PoseLandmarkType.leftAnkle, PoseLandmarkType.leftToe],
+    [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightHeel],
+    [PoseLandmarkType.rightAnkle, PoseLandmarkType.rightToe],
+    [PoseLandmarkType.rightHeel, PoseLandmarkType.rightToe],
+    [PoseLandmarkType.leftHeel, PoseLandmarkType.leftToe],
+    [PoseLandmarkType.rightIndexFinger, PoseLandmarkType.rightPinkyFinger],
+    [PoseLandmarkType.leftIndexFinger, PoseLandmarkType.leftPinkyFinger],
+  ];
 
   imgResize(poseVector, real_width, real_height) {
     List<double> pose_vector = [];
@@ -411,26 +411,26 @@ class StandingSideCrunchPainter extends CustomPainter {
   Map<String, List<double>> add_angle(keyPoints) {
     keyPoints['PoseLandmarkType.midShoulder'] = [
       ((keyPoints['PoseLandmarkType.rightShoulder']![0] +
-              keyPoints['PoseLandmarkType.leftShoulder']![0]) /
+          keyPoints['PoseLandmarkType.leftShoulder']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.rightShoulder']![1] +
-              keyPoints['PoseLandmarkType.leftShoulder']![1]) /
+          keyPoints['PoseLandmarkType.leftShoulder']![1]) /
           2)
     ];
     keyPoints['PoseLandmarkType.midHip'] = [
       ((keyPoints['PoseLandmarkType.rightHip']![0] +
-              keyPoints['PoseLandmarkType.leftHip']![0]) /
+          keyPoints['PoseLandmarkType.leftHip']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.rightHip']![1] +
-              keyPoints['PoseLandmarkType.leftHip']![1]) /
+          keyPoints['PoseLandmarkType.leftHip']![1]) /
           2)
     ];
     keyPoints['PoseLandmarkType.back'] = [
       ((keyPoints['PoseLandmarkType.midShoulder']![0] +
-              keyPoints['PoseLandmarkType.midHip']![0]) /
+          keyPoints['PoseLandmarkType.midHip']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.midShoulder']![1] +
-              keyPoints['PoseLandmarkType.midHip']![1]) /
+          keyPoints['PoseLandmarkType.midHip']![1]) /
           2)
     ];
     return keyPoints;
@@ -444,76 +444,76 @@ class StandingSideCrunchPainter extends CustomPainter {
     }
     keyPoints['PoseLandmarkType.midShoulder'] = [
       ((keyPoints['PoseLandmarkType.rightShoulder']![0] +
-              keyPoints['PoseLandmarkType.leftShoulder']![0]) /
+          keyPoints['PoseLandmarkType.leftShoulder']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.rightShoulder']![1] +
-              keyPoints['PoseLandmarkType.leftShoulder']![1]) /
+          keyPoints['PoseLandmarkType.leftShoulder']![1]) /
           2)
     ];
     keyPoints['PoseLandmarkType.midHip'] = [
       ((keyPoints['PoseLandmarkType.rightHip']![0] +
-              keyPoints['PoseLandmarkType.leftHip']![0]) /
+          keyPoints['PoseLandmarkType.leftHip']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.rightHip']![1] +
-              keyPoints['PoseLandmarkType.leftHip']![1]) /
+          keyPoints['PoseLandmarkType.leftHip']![1]) /
           2)
     ];
     keyPoints['PoseLandmarkType.back'] = [
       ((keyPoints['PoseLandmarkType.midShoulder']![0] +
-              keyPoints['PoseLandmarkType.midHip']![0]) /
+          keyPoints['PoseLandmarkType.midHip']![0]) /
           2),
       ((keyPoints['PoseLandmarkType.midShoulder']![1] +
-              keyPoints['PoseLandmarkType.midHip']![1]) /
+          keyPoints['PoseLandmarkType.midHip']![1]) /
           2)
     ];
     //=-------------------------------------------------
     answer_side_crunch_right['PoseLandmarkType.midShoulder'] = [
       ((answer_side_crunch_right['PoseLandmarkType.rightShoulder']![0] +
-              answer_side_crunch_right['PoseLandmarkType.leftShoulder']![0]) /
+          answer_side_crunch_right['PoseLandmarkType.leftShoulder']![0]) /
           2),
       ((answer_side_crunch_right['PoseLandmarkType.rightShoulder']![1] +
-              answer_side_crunch_right['PoseLandmarkType.leftShoulder']![1]) /
+          answer_side_crunch_right['PoseLandmarkType.leftShoulder']![1]) /
           2)
     ];
     answer_side_crunch_right['PoseLandmarkType.midHip'] = [
       ((answer_side_crunch_right['PoseLandmarkType.rightHip']![0] +
-              answer_side_crunch_right['PoseLandmarkType.leftHip']![0]) /
+          answer_side_crunch_right['PoseLandmarkType.leftHip']![0]) /
           2),
       ((answer_side_crunch_right['PoseLandmarkType.rightHip']![1] +
-              answer_side_crunch_right['PoseLandmarkType.leftHip']![1]) /
+          answer_side_crunch_right['PoseLandmarkType.leftHip']![1]) /
           2)
     ];
     answer_side_crunch_right['PoseLandmarkType.back'] = [
       ((answer_side_crunch_right['PoseLandmarkType.midShoulder']![0] +
-              answer_side_crunch_right['PoseLandmarkType.midHip']![0]) /
+          answer_side_crunch_right['PoseLandmarkType.midHip']![0]) /
           2),
       ((answer_side_crunch_right['PoseLandmarkType.midShoulder']![1] +
-              answer_side_crunch_right['PoseLandmarkType.midHip']![1]) /
+          answer_side_crunch_right['PoseLandmarkType.midHip']![1]) /
           2)
     ];
     //=-------------------------------------------------
     answer_side_crunch_left['PoseLandmarkType.midShoulder'] = [
       ((answer_side_crunch_left['PoseLandmarkType.rightShoulder']![0] +
-              answer_side_crunch_left['PoseLandmarkType.leftShoulder']![0]) /
+          answer_side_crunch_left['PoseLandmarkType.leftShoulder']![0]) /
           2),
       ((answer_side_crunch_left['PoseLandmarkType.rightShoulder']![1] +
-              answer_side_crunch_left['PoseLandmarkType.leftShoulder']![1]) /
+          answer_side_crunch_left['PoseLandmarkType.leftShoulder']![1]) /
           2)
     ];
     answer_side_crunch_left['PoseLandmarkType.midHip'] = [
       ((answer_side_crunch_left['PoseLandmarkType.rightHip']![0] +
-              answer_side_crunch_left['PoseLandmarkType.leftHip']![0]) /
+          answer_side_crunch_left['PoseLandmarkType.leftHip']![0]) /
           2),
       ((answer_side_crunch_left['PoseLandmarkType.rightHip']![1] +
-              answer_side_crunch_left['PoseLandmarkType.leftHip']![1]) /
+          answer_side_crunch_left['PoseLandmarkType.leftHip']![1]) /
           2)
     ];
     answer_side_crunch_left['PoseLandmarkType.back'] = [
       ((answer_side_crunch_left['PoseLandmarkType.midShoulder']![0] +
-              answer_side_crunch_left['PoseLandmarkType.midHip']![0]) /
+          answer_side_crunch_left['PoseLandmarkType.midHip']![0]) /
           2),
       ((answer_side_crunch_left['PoseLandmarkType.midShoulder']![1] +
-              answer_side_crunch_left['PoseLandmarkType.midHip']![1]) /
+          answer_side_crunch_left['PoseLandmarkType.midHip']![1]) /
           2)
     ];
     //=-------------------------------------------------
@@ -527,7 +527,8 @@ class StandingSideCrunchPainter extends CustomPainter {
     //정답 이미지 변수들 받아왔다고 치자
     Map<String, double> answerAngleList = {};
     List<List<double>> answerPointList = [];
-    List<String> key = [];
+    late List<String> key;
+    late List<String> feedback_key;
     late int idx;
     if (angleList['left_body_knee']! >= 100 &&
         angleList['right_body_knee']! >= 100) {
@@ -542,44 +543,58 @@ class StandingSideCrunchPainter extends CustomPainter {
         "right_elbow",
         "right_spine"
       ];
+      feedback_key = [
+        "left_knee_elbow",
+        "left_body_knee",
+        "left_elbow",
+        "left_spine"
+      ];
       idx = 1;
-      print("오른쪽 무릎");
     } else if (angleList['left_body_knee']! <= 100 &&
         angleList['right_body_knee']! >= 100) {
       answerAngleList = makeAngleList(answer_side_crunch_left);
       answerPointList = makePointList(answer_side_crunch_left);
       key = ["left_knee_elbow", "left_body_knee", "left_elbow", "left_spine"];
+      feedback_key = [
+        "right_knee_elbow",
+        "right_body_knee",
+        "right_elbow",
+        "right_spine"
+      ];
       idx = 0;
-      print("왼쪽 무릎");
     }
-    print(
-        "왼쪽 무릎 각도 : ${angleList['left_body_knee']} // 오른쪽 무릎 각도 : ${angleList['right_body_knee']}");
-    print("()()()()()()");
     List<double> score_list = [];
     double score_sum = 0.0;
     //75점을 넘기면 좋은 자세라고 판단.
-    double threshold = 75;
+    double threshold = 70;
     for (String i in key) {
       // 점수 계산(13주차 ppt 참고)
-      print(
-          "********************************************************************");
-      print(
-          '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])}');
       //100점으로 환산 + 높은 값이 더 좋은 자세
-      double score =
-          ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) * 50 +
-              weightedDistanceMatching(pointList[idx], answerPointList[idx]) *
-                  50;
+      late double score;
+      if (idx == 2 || idx == 3) {
+        score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
+            20 +
+            weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 80;
+        print(
+            "********************************************************************");
+        print("현재 포인트 좌표 list : ${pointList[idx]}");
+        print(
+            '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])} // 점수 : ${100 - score}');
+      } else {
+        score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
+            50 +
+            weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 50;
+        print('Score : ${100 - score}');
+      }
       score = 100 - score;
-
       idx += 2;
       // sideCrunch변수에 운동에 중요한 부위를 순서대로 넣었다고 침.
       // score가 threshold보다 낮으면 피드백 구문 하나 출력 -> 끝내기
-      print('Score : $score');
       score_list.add(score);
       score_sum += score;
     }
-    getMax(score_list, score_sum, threshold, key, sideCrunchCommand);
+    score_sum /= 4;
+    getMax(score_list, score_sum, threshold, feedback_key, sideCrunchCommand);
     print(
         "-------------------------------------------------------------------------------------------------------------------------------------------");
   }
