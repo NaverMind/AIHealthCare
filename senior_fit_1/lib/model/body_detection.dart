@@ -101,6 +101,11 @@ class _DetectPageState extends State<DetectPage> {
     super.initState();
     _loadPrefs();
     settingForExp();
+    DateTime dayTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().add(const Duration(days: -1)).day,
+    );
 
     startTime = DateTime.now();
     _startCameraStream();
@@ -137,6 +142,7 @@ class _DetectPageState extends State<DetectPage> {
                 feedback: Value(prefs.getString('feedback')!),
                 part: Value(prefs.getString('part')!),
                 score: Value(prefs.getDouble('score_sum')!.toInt()),
+                createdAt: Value(dayTime),
               ),
             );
             print('👍👍👍👍 database : $keyValue 저장 완료');
