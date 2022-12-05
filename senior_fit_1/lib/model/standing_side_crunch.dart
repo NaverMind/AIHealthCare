@@ -166,8 +166,8 @@ class StandingSideCrunchPainter extends CustomPainter {
     "right_knee_elbow": "오른쪽 무릎과 팔꿈치",
     "left_body_knee": "왼쪽 무릎",
     "right_body_knee": "오른쪽 무릎",
-    "left_elbow": "왼손",
-    "right_elbow": "오른손",
+    "left_elbow": "왼팔",
+    "right_elbow": "오른팔",
     "left_spine": "척추",
     "right_spine": "척추"
   };
@@ -620,7 +620,7 @@ class StandingSideCrunchPainter extends CustomPainter {
       prefs.setDouble('score_sum', score_sum);
       prefs.setDouble('score', score_list[idx]);
       prefs.setString('part', part[key[idx]]!);
-      
+
       // 스코어가 제일 낮은 값의 자세가 threshold보다 작거나 같으면 그 부위에 대한 피드백 해줌.
       if (score_list[idx] <= threshold)
         prefs.setString('feedback', sideCrunchCommand[key[idx]]!);
