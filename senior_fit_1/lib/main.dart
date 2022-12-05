@@ -1,6 +1,7 @@
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:senior_fit_1/screens/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ import 'package:senior_fit_1/screens/note.dart';
 import 'package:senior_fit_1/screens/mypage.dart';
 
 import 'database/drift_database.dart';
+
 // App에 넣음
 // ch-appui test
 late SharedPreferences prefs;
@@ -19,6 +21,14 @@ void main() async {
   GetIt.I.registerSingleton<LocalDatabase>(database);
   prefs = await SharedPreferences.getInstance();
   // await prefs.clear(); // for test
+
+  // 세로 고정 가능
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+
   runApp(const MyApp());
 }
 
@@ -29,6 +39,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     bool visited = prefs.getBool('visited') ?? false;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: visited ? const MyHomePage() : const OnBoardingPage(),
     );
   }
@@ -116,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         return const Center(child: Text('Error'));
     }
-
   }
 
   Widget bottomNav() {

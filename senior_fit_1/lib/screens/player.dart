@@ -34,10 +34,17 @@ class PlayerState extends State<Player> {
         enableCaption: true,
       ),
     );
-
-    setVer();
+    _videoID == 'uBZl8x_Vclc' ?
+    setHori() : null;
   }
 
+  void setVer() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
   void setHori() async {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([
@@ -46,7 +53,7 @@ class PlayerState extends State<Player> {
     ]);
   }
 
-  void setVer() async {
+  void setRotateAvai() async {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([]);
   }
@@ -54,7 +61,7 @@ class PlayerState extends State<Player> {
   @override
   void dispose() {
     super.dispose();
-    setVer();
+    setRotateAvai();
   }
 
   @override
@@ -65,6 +72,7 @@ class PlayerState extends State<Player> {
           key: ObjectKey(_controller),
           controller: _controller,
           actionsPadding: const EdgeInsets.only(left: 16.0),
+          aspectRatio: 9/16,
           bottomActions: [
             const SizedBox(width: 10.0),
             CurrentPosition(),
@@ -72,7 +80,7 @@ class PlayerState extends State<Player> {
             ProgressBar(isExpanded: true),
             const SizedBox(width: 10.0),
             RemainingDuration(),
-            FullScreenButton(),
+            // FullScreenButton(),
           ],
           topActions: [
             IconButton(

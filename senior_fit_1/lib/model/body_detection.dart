@@ -121,8 +121,6 @@ class _DetectPageState extends State<DetectPage> {
         if (isInFeedbackTime) {
           if (jongRoSoundOn) {
             flutterTts.speak('종료');
-          } else {
-            FlutterBeep.beep(false);
           }
           String? feedbackStr = prefs.getString('feedback');
           if (feedbackStr != '') {
@@ -151,17 +149,7 @@ class _DetectPageState extends State<DetectPage> {
           FlutterBeep.beep(false);
         }
       }
-      if(thisCounter == widget.counter){
-        _stopCameraStream();
-        // Navigator.pop(context);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ResultPage(
-                  actionname: widget.actionname,
-                  startTime: startTime,
-                )));
-      }
+
     });
   }
 
@@ -210,6 +198,9 @@ class _DetectPageState extends State<DetectPage> {
     int cntTemp = 0;
     bool isFirst = true;
     while (true) {
+      if(thisCounter == widget.counter*2){
+        break;
+      }
       if (cntTemp == 0) {
         cntTemp++;
         if (isFirst) {
@@ -232,6 +223,20 @@ class _DetectPageState extends State<DetectPage> {
         ));
       }
     }
+
+    await Future.delayed(Duration(
+      milliseconds: 2000,
+    ));
+    flutterTts.speak('수고 하셨습니다.');
+    _stopCameraStream();
+    // Navigator.pop(context);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultPage(
+              actionname: widget.actionname,
+              startTime: startTime,
+            )));
   }
 
   Future<void> _stopCameraStream() async {
@@ -475,39 +480,3 @@ class _DetectPageState extends State<DetectPage> {
     );
   }
 }
-//
-// OutlinedButton(
-// onPressed: () {},
-// child: Text(
-// 'InfTime: $infTime',
-// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-// ),
-// ),
-// OutlinedButton(
-// onPressed: () {},
-// child: Text(
-// 'DectTime: $dectTime',
-// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-// ),
-// ),
-// OutlinedButton(
-// onPressed: () {},
-// child: Text(
-// 'IO Time: ${dectTime - infTime}',
-// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-// ),
-// ),
-// OutlinedButton(
-// onPressed: () {},
-// child: Text(
-// 'Img size: ${_imageSize.height} / ${_imageSize.width}',
-// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-// ),
-// ),
-// OutlinedButton(
-// onPressed: () {},
-// child: Text(
-// 'Img size: $isInCamera',
-// style: TextStyle(color: Colors.deepPurple, fontSize: 25),
-// ),
-// ),
