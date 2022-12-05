@@ -162,12 +162,12 @@ class StandingSideCrunchPainter extends CustomPainter {
     "right_spine": "척추를 좀 더 펴주세요!"
   };
   final Map<String, String> part = {
-    "left_knee_elbow": "왼쪽 무릎과 팔꿈치",
-    "right_knee_elbow": "오른쪽 무릎과 팔꿈치",
+    "left_knee_elbow": "왼쪽 무릎과 팔꿈치 거리",
+    "right_knee_elbow": "오른쪽 무릎과 팔꿈치 거리",
     "left_body_knee": "왼쪽 무릎",
     "right_body_knee": "오른쪽 무릎",
-    "left_elbow": "왼팔",
-    "right_elbow": "오른팔",
+    "left_elbow": "왼쪽 팔",
+    "right_elbow": "오른쪽 팔",
     "left_spine": "척추",
     "right_spine": "척추"
   };
