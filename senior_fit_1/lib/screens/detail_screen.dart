@@ -31,8 +31,8 @@ class _DetailScreenState extends State<DetailScreen> {
   var tutorialYoutubelink = {
     '플랭크': 'VPZvWMXNfwk',
     '푸시업': '_m31z7To0Ko',
-    '버드독': 'SfjFnlwBwgE',
-    '사이드 크런치': 'GjaYv6vaqu8'
+    '버드독': 'uBZl8x_Vclc',
+    '사이드 크런치': '3dA4EJ3wANs'
   };
 
   int newValue = 10;
@@ -50,7 +50,7 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     super.initState();
     _loadPrefs();
-
+    newValue = (widget.action == '버드독') ? 3 : 5;
   }
 
   @override
@@ -122,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             Tile(
               image: 'images/iconLearn.png',
-              description: '자세를 교정받기 전 정확한 운동 자세를 배워보세요!',
+              description: '자세를 교정받기 전\n정확한 운동 자세를 배워보세요!',
               action: '운동 배우기',
               isCamera: false,
               actionname: widget.action,
@@ -133,7 +133,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             Tile(
               image: 'images/iconFix.png',
-              description: '나의 자세를 실시간으로 코칭 받아 보세요!',
+              description: '나의 자세를 실시간으로\n코칭 받아 보세요!',
               action: '자세 교정받기',
               isCamera: true,
               actionname: widget.action,
