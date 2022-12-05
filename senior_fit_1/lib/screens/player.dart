@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -33,29 +34,62 @@ class PlayerState extends State<Player> {
         enableCaption: true,
       ),
     );
+
+    setVer();
+  }
+
+  void setHori() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  void setVer() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    setVer();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _videoTitle,
-          style: const TextStyle(fontSize: 20.0),
+      body: Center(
+        child: YoutubePlayer(
+          key: ObjectKey(_controller),
+          controller: _controller,
+          actionsPadding: const EdgeInsets.only(left: 16.0),
+          bottomActions: [
+            const SizedBox(width: 10.0),
+            CurrentPosition(),
+            const SizedBox(width: 10.0),
+            ProgressBar(isExpanded: true),
+            const SizedBox(width: 10.0),
+            RemainingDuration(),
+            FullScreenButton(),
+          ],
+          topActions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.cancel_outlined,
+                size: 40,
+                color: Colors.red,
+              ),
+            ),
+          ],
+          onEnded: (_) {
+            Navigator.of(context).pop();
+          },
         ),
-      ),
-      body: YoutubePlayer(
-        key: ObjectKey(_controller),
-        controller: _controller,
-        actionsPadding: const EdgeInsets.only(left: 16.0),
-        bottomActions: [
-          CurrentPosition(),
-          const SizedBox(width: 10.0),
-          ProgressBar(isExpanded: true),
-          const SizedBox(width: 10.0),
-          RemainingDuration(),
-          //FullScreenButton(),
-        ],
       ),
     );
   }

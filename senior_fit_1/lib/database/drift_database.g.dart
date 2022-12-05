@@ -277,7 +277,8 @@ class $FeedbackScoresTable extends FeedbackScores
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
-      clientDefault: () => DateTime.now());
+      clientDefault: () => DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day));
   @override
   List<GeneratedColumn> get $columns =>
       [id, activeName, startTime, feedback, part, score, createdAt];
