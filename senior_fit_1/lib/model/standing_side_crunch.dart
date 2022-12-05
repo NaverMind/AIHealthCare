@@ -154,8 +154,8 @@ class StandingSideCrunchPainter extends CustomPainter {
   final Map<String, String> sideCrunchCommand = {
     "left_knee_elbow": "왼쪽 팔꿈치와 무릎을 더 붙이세요!",
     "right_knee_elbow": "오른쪽 팔꿈치와 무릎을 더 붙이세요!",
-    "left_body_knee": "왼쪽 무릎을 조금 더 측면으로 옮겨주세요!",
-    "right_body_knee": "오른쪽 무릎을 조금 더 측면으로 옮겨주세요!",
+    "left_body_knee": "왼쪽 무릎을 측면으로 옮겨주세요!",
+    "right_body_knee": "오른쪽 무릎을 측면으로 옮겨주세요!",
     "left_elbow": "왼손을 머리뒤에 위치해주세요!",
     "right_elbow": "오른손을 머리뒤에 위치해주세요!",
     "left_spine": "척추를 좀 더 펴주세요!",
@@ -527,7 +527,8 @@ class StandingSideCrunchPainter extends CustomPainter {
     //정답 이미지 변수들 받아왔다고 치자
     Map<String, double> answerAngleList = {};
     List<List<double>> answerPointList = [];
-    List<String> key = [];
+    late List<String> key;
+    late List<String> feedback_key;
     late int idx;
     if (angleList['left_body_knee']! >= 100 &&
         angleList['right_body_knee']! >= 100) {
@@ -542,44 +543,58 @@ class StandingSideCrunchPainter extends CustomPainter {
         "right_elbow",
         "right_spine"
       ];
+      feedback_key = [
+        "left_knee_elbow",
+        "left_body_knee",
+        "left_elbow",
+        "left_spine"
+      ];
       idx = 1;
-      print("오른쪽 무릎");
     } else if (angleList['left_body_knee']! <= 100 &&
         angleList['right_body_knee']! >= 100) {
       answerAngleList = makeAngleList(answer_side_crunch_left);
       answerPointList = makePointList(answer_side_crunch_left);
       key = ["left_knee_elbow", "left_body_knee", "left_elbow", "left_spine"];
+      feedback_key = [
+        "right_knee_elbow",
+        "right_body_knee",
+        "right_elbow",
+        "right_spine"
+      ];
       idx = 0;
-      print("왼쪽 무릎");
     }
-    print(
-        "왼쪽 무릎 각도 : ${angleList['left_body_knee']} // 오른쪽 무릎 각도 : ${angleList['right_body_knee']}");
-    print("()()()()()()");
     List<double> score_list = [];
     double score_sum = 0.0;
     //75점을 넘기면 좋은 자세라고 판단.
-    double threshold = 75;
+    double threshold = 73;
     for (String i in key) {
       // 점수 계산(13주차 ppt 참고)
-      print(
-          "********************************************************************");
-      print(
-          '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])}');
       //100점으로 환산 + 높은 값이 더 좋은 자세
-      double score =
-          ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) * 50 +
-              weightedDistanceMatching(pointList[idx], answerPointList[idx]) *
-                  50;
+      late double score;
+      if (idx == 2 || idx == 3) {
+        score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
+                20 +
+            weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 80;
+        print(
+            "********************************************************************");
+        print("현재 포인트 좌표 list : ${pointList[idx]}");
+        print(
+            '현재 부위 : ${i} // 정답 각도 : ${answerAngleList[i]} // 현재 각도 : ${angleList[i]} // 포즈 점수 : ${weightedDistanceMatching(pointList[idx], answerPointList![idx])} // 점수 : ${100 - score}');
+      } else {
+        score = ((answerAngleList[i]! - angleList[i]!.toDouble()).abs() / 180) *
+                50 +
+            weightedDistanceMatching(pointList[idx], answerPointList[idx]) * 50;
+        print('Score : ${100 - score}');
+      }
       score = 100 - score;
-
       idx += 2;
       // sideCrunch변수에 운동에 중요한 부위를 순서대로 넣었다고 침.
       // score가 threshold보다 낮으면 피드백 구문 하나 출력 -> 끝내기
-      print('Score : $score');
       score_list.add(score);
       score_sum += score;
     }
-    getMax(score_list, score_sum, threshold, key, sideCrunchCommand);
+    score_sum /= 4;
+    getMax(score_list, score_sum, threshold, feedback_key, sideCrunchCommand);
     print(
         "-------------------------------------------------------------------------------------------------------------------------------------------");
   }
@@ -600,7 +615,7 @@ class StandingSideCrunchPainter extends CustomPainter {
       for (int i = 1; i < score_list.length; i++) {
         if (score_list[idx] > score_list[i]) idx = i;
       }
-      prefs.setDouble('score_sum', score_sum/4);
+      prefs.setDouble('score_sum', score_sum);
       prefs.setDouble('score', score_list[idx]);
       prefs.setString('part', key[idx]);
       // 스코어가 제일 낮은 값의 자세가 threshold보다 작거나 같으면 그 부위에 대한 피드백 해줌.

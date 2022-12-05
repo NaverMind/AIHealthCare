@@ -63,26 +63,27 @@ class _DetectPageState extends State<DetectPage> {
   bool breakTimeOn = false;
   int breakTimeMillisecond = 0;
 
-  /// 실험 변수 설정========================================
-  void settingForExp() {
+  /// 실험 변수 설정=======================================
+   void settingForExp() {
     if (widget.actionname == '사이드 크런치') {
-      readyBeepTermMillisecond = 1000;
+      readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
-      inScoringTimeMillisecond = 1000;
+      inScoringTimeMillisecond = 500;
       ttsSetSpeechRate = 0.5;
       youziSoundOn = false;
       jongRoSoundOn = false;
-      breakTimeOn = false;
-      breakTimeMillisecond = 0;
-    } else if (widget.actionname == '버드독') {
-      readyBeepTermMillisecond = 1000;
+      breakTimeOn = true;
+      breakTimeMillisecond = 2500;
+    }
+    else if(widget.actionname == '버드독'){
+      readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
-      inScoringTimeMillisecond = 5000;
+      inScoringTimeMillisecond = 7000;
       ttsSetSpeechRate = 0.5;
       youziSoundOn = true;
       jongRoSoundOn = true;
       breakTimeOn = true;
-      breakTimeMillisecond = 5000;
+      breakTimeMillisecond = 10000;
     }
   }
 
