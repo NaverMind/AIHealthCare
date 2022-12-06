@@ -103,8 +103,8 @@ class _DetectPageState extends State<DetectPage> {
     settingForExp();
     DateTime dayTime = DateTime(
       DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().add(const Duration(days: -1)).day,
+      DateTime.now().add(const Duration(days: -5)).month,
+      DateTime.now().add(const Duration(days: -5)).day,
     );
 
     startTime = DateTime.now();
@@ -127,9 +127,9 @@ class _DetectPageState extends State<DetectPage> {
           if (jongRoSoundOn) {
             flutterTts.speak('종료');
           }
-          String? feedbackStr = prefs.getString('feedback');
-          if (feedbackStr != '') {
-            flutterTts.speak(feedbackStr!);
+          List<String>? feedbackStr = prefs.getString('feedback')?.split('.');
+          if (feedbackStr![0] != '') {
+            flutterTts.speak(feedbackStr![0]+feedbackStr![1]);
             thisCounter++;
             // TODO: db에 저장 필요.
             // active name, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
@@ -137,7 +137,7 @@ class _DetectPageState extends State<DetectPage> {
               FeedbackScoresCompanion(
                 activeName: Value(widget.actionname),
                 startTime: Value(startTime),
-                feedback: Value(prefs.getString('feedback')!),
+                feedback: Value(prefs.getString('feedback')!.split('.')[0]),
                 part: Value(prefs.getString('part')!),
                 score: Value(prefs.getDouble('score_sum')!.toInt()),
                 createdAt: Value(dayTime),

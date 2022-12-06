@@ -62,11 +62,13 @@ class _NoteDetailState extends State<NoteDetail> {
         spotTemp[diff][0]++;
       }
       if (diff < 31) {
-        partCounter++;
-        if (notePartCounter.containsKey(element.part)) {
-          notePartCounter[element.part] = notePartCounter[element.part]! + 1;
-        } else {
-          notePartCounter[element.part] = 1;
+        if(element.part != 'NONE'){
+          partCounter++;
+          if (notePartCounter.containsKey(element.part)) {
+            notePartCounter[element.part] = notePartCounter[element.part]! + 1;
+          } else {
+            notePartCounter[element.part] = 1;
+          }
         }
       }
     }

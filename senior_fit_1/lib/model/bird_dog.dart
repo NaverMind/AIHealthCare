@@ -551,7 +551,7 @@ class BirdDogPainter extends CustomPainter {
     //feedback
     if(isLeft){ //피드백은 오른쪽을 해줘
       if(max_score== -2) {
-        feedback = "프레임 안에서 정확한 자세를 취해주세요.";
+        feedback = "프레임 안에서 정확한 자세를 취해주세요!";
       }
       else if(max_score == -1){
         feedback = "훌륭한 자세입니다!";
@@ -579,7 +579,7 @@ class BirdDogPainter extends CustomPainter {
     }
     else{
       if(max_score== -2) {
-        feedback = "프레임 안에서 정확한 자세를 취해주세요.";
+        feedback = "프레임 안에서 정확한 자세를 취해주세요!";
       }
       else if(max_score == -1){
         feedback = "훌륭한 자세입니다!";

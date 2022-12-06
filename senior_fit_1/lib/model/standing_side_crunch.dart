@@ -576,7 +576,7 @@ class StandingSideCrunchPainter extends CustomPainter {
     List<double> score_list = [];
     double score_sum = 0.0;
     //75점을 넘기면 좋은 자세라고 판단.
-    double threshold = 73;
+    double threshold = 78;
     for (String i in key) {
       // 점수 계산(13주차 ppt 참고)
       //100점으로 환산 + 높은 값이 더 좋은 자세
