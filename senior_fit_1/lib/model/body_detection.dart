@@ -64,7 +64,7 @@ class _DetectPageState extends State<DetectPage> {
   int breakTimeMillisecond = 0;
 
   /// 실험 변수 설정=======================================
-   void settingForExp() {
+  void settingForExp() {
     if (widget.actionname == '사이드 크런치') {
       readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
@@ -74,8 +74,7 @@ class _DetectPageState extends State<DetectPage> {
       jongRoSoundOn = false;
       breakTimeOn = true;
       breakTimeMillisecond = 2500;
-    }
-    else if(widget.actionname == '버드독'){
+    } else if (widget.actionname == '버드독') {
       readyBeepTermMillisecond = 500;
       readyBeepCount = 3;
       inScoringTimeMillisecond = 7000;
@@ -101,11 +100,11 @@ class _DetectPageState extends State<DetectPage> {
     super.initState();
     _loadPrefs();
     settingForExp();
-    DateTime dayTime = DateTime(
-      DateTime.now().year,
-      DateTime.now().add(const Duration(days: -5)).month,
-      DateTime.now().add(const Duration(days: -5)).day,
-    );
+    // DateTime dayTime = DateTime(
+    //   DateTime.now().year,
+    //   DateTime.now().add(const Duration(days: -5)).month,
+    //   DateTime.now().add(const Duration(days: -5)).day,
+    // );
 
     startTime = DateTime.now();
     _startCameraStream();
@@ -129,7 +128,11 @@ class _DetectPageState extends State<DetectPage> {
           }
           List<String>? feedbackStr = prefs.getString('feedback')?.split('.');
           if (feedbackStr![0] != '') {
-            flutterTts.speak(feedbackStr![0]+feedbackStr![1]);
+            if (feedbackStr.length > 1) {
+              flutterTts.speak(feedbackStr![0] + feedbackStr![1]);
+            } else {
+              flutterTts.speak(feedbackStr![0]);
+            }
             thisCounter++;
             // TODO: db에 저장 필요.
             // active name, score(prefs), feedback(prefs), part(prefs), 운동 시작 날짜+시간
@@ -140,7 +143,7 @@ class _DetectPageState extends State<DetectPage> {
                 feedback: Value(prefs.getString('feedback')!.split('.')[0]),
                 part: Value(prefs.getString('part')!),
                 score: Value(prefs.getDouble('score_sum')!.toInt()),
-                createdAt: Value(dayTime),
+                // createdAt: Value(dayTime),
               ),
             );
             print('👍👍👍👍 database : $keyValue 저장 완료');
@@ -155,7 +158,6 @@ class _DetectPageState extends State<DetectPage> {
           FlutterBeep.beep(false);
         }
       }
-
     });
   }
 
@@ -204,7 +206,7 @@ class _DetectPageState extends State<DetectPage> {
     int cntTemp = 0;
     bool isFirst = true;
     while (true) {
-      if(thisCounter == widget.counter*2){
+      if (thisCounter == widget.counter * 2) {
         break;
       }
       if (cntTemp == 0) {
@@ -240,9 +242,9 @@ class _DetectPageState extends State<DetectPage> {
         context,
         MaterialPageRoute(
             builder: (context) => ResultPage(
-              actionname: widget.actionname,
-              startTime: startTime,
-            )));
+                  actionname: widget.actionname,
+                  startTime: startTime,
+                )));
   }
 
   Future<void> _stopCameraStream() async {
