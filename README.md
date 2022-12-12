@@ -1,8 +1,3 @@
-# Project Readme
-
-Created at: 2022년 12월 12일 오후 3:29
-Status: In progress
-
 ![Untitled](assets/Untitled.png)
 
 # Senior Fit
