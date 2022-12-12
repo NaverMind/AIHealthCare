@@ -15,8 +15,6 @@ Status: In progress
 
 # 기능 설명
 
----
-
 ## 1. 서비스
 
 Senior Fit은 사용자가 운동 시작 전 운동 횟수를 선택 할 수 있습니다. 운동을 시작 후 사용자가 **운동 자세**를 취할 때 **운동별 중요부위마다 scoring**을 합니다. 1회 운동이 끝날 때 마다 가장 낮은 score를 가진 부위를  **FlutterTTS**를 이용해 **음성으로 피드백**을 해줍니다. 
@@ -65,8 +63,6 @@ Senior Fit은 사용자가 운동 시작 전 운동 횟수를 선택 할 수 있
 ![캡스톤디자인 성과 발표회.pptx.png](assets/%25E1%2584%258F%25E1%2585%25A2%25E1%2586%25B8%25E1%2584%2589%25E1%2585%25B3%25E1%2584%2590%25E1%2585%25A9%25E1%2586%25AB%25E1%2584%2583%25E1%2585%25B5%25E1%2584%258C%25E1%2585%25A1%25E1%2584%258B%25E1%2585%25B5%25E1%2586%25AB_%25E1%2584%2589%25E1%2585%25A5%25E1%2586%25BC%25E1%2584%2580%25E1%2585%25AA_%25E1%2584%2587%25E1%2585%25A1%25E1%2586%25AF%25E1%2584%2591%25E1%2585%25AD%25E1%2584%2592%25E1%2585%25AC.pptx.png)
 
 # 기술 설명
-
----
 
 ## 1. **<자세 교정받기>** 구현
 
@@ -121,8 +117,6 @@ Cosine Similarity 이용하여 정답 자세와 사용자 자세간 유사도 �
 
 # 기술스택
 
----
-
 ## AI
 
 | Python |
@@ -157,8 +151,6 @@ Cosine Similarity 이용하여 정답 자세와 사용자 자세간 유사도 �
 
 # Usage(프로젝트 사용법)
 
----
-
 ## Android
 
 - apk build
@@ -171,8 +163,6 @@ $ flutter build apk --release
 
 # Docs
 
----
-
 Introduction presentation
 
 [Short version video](https://youtu.be/ZTaQt69vYvg)
@@ -181,22 +171,17 @@ Introduction presentation
 
 # 팀원
 
-| 안유진 | 강소망 | 송치헌 |
-| --- | --- | --- |
-| https://github.com/dkswndms4782 | https://github.com/Somang-Kang | https://github.com/Chi-Honey |
-| AI | AI | APP |
-
 <div align="left">
   <table>
     <tr>
       <td align="center">
         <a href="https://github.com/kkt4828/">
-          <img src="https://avatars.githubusercontent.com/u/67678760?v=4" alt="안유진 프로필" width=120 height=120 />
+          <img src="https://avatars.githubusercontent.com/u/59716219?s=60&v=4" alt="안유진 프로필" width=120 height=120 />
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Somang-Kang">
-          <img src="https://avatars.githubusercontent.com/u/77764316?v=4" alt="강소망 프로필" width=120 height=120 />
+          <img src="https://user-images.githubusercontent.com/77764316/207003353-6f449c1a-75b1-40a3-b051-17089a5ff4aa.JPG" alt="강소망 프로필" width=120 height=120 />
         </a>
       </td>
       <td align="center">
@@ -208,17 +193,17 @@ Introduction presentation
     <tr>
       <td align="center">
         <a href="https://github.com/dkswndms4782/">
-          안유진
+          안유진(AI)
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Somang-Kang">
-          강소망
+          강소망(AI)
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Chi-Honey">
-          송치헌
+          송치헌(APP)
         </a>
       </td>
     </tr>
