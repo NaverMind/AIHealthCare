@@ -201,7 +201,7 @@ Introduction presentation
       </td>
       <td align="center">
         <a href="https://github.com/mata1139">
-          <img src="https://avatars.githubusercontent.com/u/70196880?v=4" alt="송치헌 프로필" width=120 height=120 />
+          <img src="https://avatars.githubusercontent.com/u/86656987?s=400&u=7ef721c3eafdb1cd9f1847b1fba6a3cb3802b18f&v=4" alt="송치헌 프로필" width=120 height=120 />
         </a>
       </td>
     </tr>
