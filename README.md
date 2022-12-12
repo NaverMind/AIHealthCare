@@ -185,3 +185,45 @@ Introduction presentation
 | --- | --- | --- |
 | https://github.com/dkswndms4782 | https://github.com/Somang-Kang | https://github.com/Chi-Honey |
 | AI | AI | APP |
+
+<div align="left">
+  <table>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/kkt4828/">
+          <img src="https://avatars.githubusercontent.com/u/67678760?v=4" alt="안유진 프로필" width=120 height=120 />
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/mata1139">
+          <img src="https://avatars.githubusercontent.com/u/70196880?v=4" alt="송치헌 프로필" width=120 height=120 />
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/Somang-Kang">
+          <img src="https://avatars.githubusercontent.com/u/77764316?v=4" alt="강소망 프로필" width=120 height=120 />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/dkswndms4782/">
+          안유진
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/Chi-Honey">
+          송치헌
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/Somang-Kang">
+          강소망
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+<div id="5"></div>
