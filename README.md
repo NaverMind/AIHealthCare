@@ -1,12 +1,13 @@
 ![Untitled](assets/Untitled.png)
-
-# Senior Fit
+<div align="center">
+<h1>Senior Fit</h1>
 
 ![vllo.GIF](assets/vllo.gif)
 
 중장년층은 정확한 운동 자세 인지에 대한 어려움이 있습니다. 부정확한 운동자세는 심각한 통증을 유발할 가능성이 있습니다. 
 
 시니어핏은 AI 기반의 자세 교정 어플리케이션을 제공합니다. 실시간 자세 분석과 음성 코칭 서비스를 통해 Personal Training을 받는 것과 유사하게 운동을 할 수 있습니다. 또한 중장년층의 운동 적합도를 고려한 선별된 운동 종목을 제공함으로써 보다 적절한 training을 제공합니다. 
+</div>
 
 # 기능 설명
 
@@ -17,9 +18,8 @@ Senior Fit은 사용자가 운동 시작 전 운동 횟수를 선택 할 수 있
 ## 2. 운동 자세 튜토리얼
 
 **↘️ 스탠딩 사이드 크런치**
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/59716219/207007255-0d3b1d5d-6075-4a59-beac-8c188d63498a.jpeg">
-</p>
+<img src="https://user-images.githubusercontent.com/59716219/207008463-cca8e34c-6d6a-4dbc-977b-bd11c56d99f2.gif">
+
 
 **[Youtube link]**
 
