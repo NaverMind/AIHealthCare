@@ -80,7 +80,7 @@ BlazePose는 모바일에서도 human pose estimation에 대한 real-time infere
 Cosine Similarity 이용하여 정답 자세와 사용자 자세간 유사도 판별
 
 <aside>
-📶 **Cosine Similarity**
+📶 ****Cosine Similarity****
 
 ![Untitled](assets/Untitled%203.png)
 
