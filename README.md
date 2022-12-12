@@ -17,8 +17,9 @@ Senior Fit은 사용자가 운동 시작 전 운동 횟수를 선택 할 수 있
 ## 2. 운동 자세 튜토리얼
 
 **↘️ 스탠딩 사이드 크런치**
-
-![Untitled](assets/Untitled.jpeg)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/59716219/207007255-0d3b1d5d-6075-4a59-beac-8c188d63498a.jpeg">
+</p>
 
 **[Youtube link]**
 
