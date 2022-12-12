@@ -195,13 +195,13 @@ Introduction presentation
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/mata1139">
-          <img src="https://avatars.githubusercontent.com/u/70196880?v=4" alt="송치헌 프로필" width=120 height=120 />
+        <a href="https://github.com/Somang-Kang">
+          <img src="https://avatars.githubusercontent.com/u/77764316?v=4" alt="강소망 프로필" width=120 height=120 />
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/Somang-Kang">
-          <img src="https://avatars.githubusercontent.com/u/77764316?v=4" alt="강소망 프로필" width=120 height=120 />
+        <a href="https://github.com/mata1139">
+          <img src="https://avatars.githubusercontent.com/u/70196880?v=4" alt="송치헌 프로필" width=120 height=120 />
         </a>
       </td>
     </tr>
@@ -212,13 +212,13 @@ Introduction presentation
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/Chi-Honey">
-          송치헌
+        <a href="https://github.com/Somang-Kang">
+          강소망
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/Somang-Kang">
-          강소망
+        <a href="https://github.com/Chi-Honey">
+          송치헌
         </a>
       </td>
     </tr>
