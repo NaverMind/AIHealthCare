@@ -159,7 +159,7 @@ $ flutter build apk --release
 
 # Docs
 
-[Introduction presentation](asset/Introduction.pptx.pdf)
+[Introduction presentation](https://github.com/NaverMind/AIHealthCare/blob/main/assets/Introduction.pptx.pdf)
 
 [Short version video](https://youtu.be/ZTaQt69vYvg)
 
