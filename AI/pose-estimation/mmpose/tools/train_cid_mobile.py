@@ -89,8 +89,8 @@ def main():
 
     args = parse_args()
 
-    cfg = Config.fromfile('./configs/myconfigs/mobilenetv2_coco_512x512.py')
-    cfg.work_dir = '/shared/home/navermind/mmpose/mywork/mobilenet3'
+    cfg = Config.fromfile('./configs/myconfigs/cid_mobile_coco_512x512.py')
+    cfg.work_dir = '/shared/home/navermind/mmpose/mywork/cid_mobile'
     cfg.gpu_ids = range(1)
     cfg.seed = 0
     cfg.log_config.interval = 10

@@ -18,7 +18,10 @@ from mmpose.apis import init_random_seed, train_model
 from mmpose.datasets import build_dataset
 from mmpose.models import build_posenet
 from mmpose.utils import collect_env, get_root_logger, setup_multi_processes
-
+import torch
+from torch import nn
+import torch.nn.utils.prune as prune
+import torch.nn.functional as F
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a pose model')
@@ -89,8 +92,8 @@ def main():
 
     args = parse_args()
 
-    cfg = Config.fromfile('./configs/myconfigs/mobilenetv2_coco_512x512.py')
-    cfg.work_dir = '/shared/home/navermind/mmpose/mywork/mobilenet3'
+    cfg = Config.fromfile('./configs/myconfigs/hrnet_w32_coco_512x512.py')
+    cfg.work_dir = '/shared/home/navermind/mmpose/mywork/hrnet_prun'
     cfg.gpu_ids = range(1)
     cfg.seed = 0
     cfg.log_config.interval = 10
@@ -185,6 +188,19 @@ def main():
     meta['seed'] = seed
 
     model = build_posenet(cfg.model)
+    
+    #module =model.backbone.conv1
+    
+    for name, module in model.backbone.named_modules():
+    # 모든 2D-conv 층의 20% 연결에 대해 가지치기 기법을 적용
+        if isinstance(module, torch.nn.Conv2d):
+            prune.l1_unstructured(module, name='weight', amount=0.2)
+        # 모든 선형 층의 40% 연결에 대해 가지치기 기법을 적용
+        elif isinstance(module, torch.nn.Linear):
+            prune.l1_unstructured(module, name='weight', amount=0.4)
+    
+    
+    
     datasets = [build_dataset(cfg.data.train)]
 
     if len(cfg.workflow) == 2:

@@ -1,4 +1,4 @@
-checkpoint_config = dict(interval=10)
+checkpoint_config = dict(interval=1)
 
 log_config = dict(
     interval=50,
@@ -8,7 +8,7 @@ log_config = dict(
              init_kwargs={
                  'project': 'HPE modesl',
                  'entity' : 'somang',
-                 'name' : 'mobile_net3_bottom_up'},
+                 'name' : 'CID_hrnet_lite1'},
             )
         # dict(type='TensorboardLoggerHook')
         # dict(type='PaviLoggerHook') # for internal services

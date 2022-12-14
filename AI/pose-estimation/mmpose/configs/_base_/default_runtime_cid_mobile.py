@@ -8,7 +8,7 @@ log_config = dict(
              init_kwargs={
                  'project': 'HPE modesl',
                  'entity' : 'somang',
-                 'name' : 'mobile_net3_bottom_up'},
+                 'name' : 'CID_mobile'},
             )
         # dict(type='TensorboardLoggerHook')
         # dict(type='PaviLoggerHook') # for internal services
