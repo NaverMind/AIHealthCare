@@ -29,10 +29,6 @@
 
 ![Untitled](assets/Untitled%203.png)
 
-![Untitled](assets/Untitled%204.png)
-
-![Untitled](assets/Untitled%205.png)
-
 ![Untitled](assets/Untitled%206.png)
 
 ![Untitled](assets/Untitled%207.png)
