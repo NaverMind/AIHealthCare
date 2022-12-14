@@ -159,7 +159,7 @@ $ flutter build apk --release
 
 # Docs
 
-Introduction presentation
+[Introduction presentation](asset/Introduction.pptx.pdf)
 
 [Short version video](https://youtu.be/ZTaQt69vYvg)
 
