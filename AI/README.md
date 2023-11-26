@@ -75,6 +75,8 @@ python tools/train_hrnet_prun.py
 
 # 🌐 Tabular data Classification
 
+### 모델 실험 결과
+
 | Model | acc | inference time |
 | --- | --- | --- |
 | LSTM | 0.6629 | 148ms |
