@@ -74,3 +74,9 @@ python tools/train_hrnet_prun.py
 - [wandb](https://wandb.ai/somang/HPE%20modesl?workspace=user-somang)
 
 # 🌐 Tabular data Classification
+
+| Model | mAP50 | inference time |
+| --- | --- | --- |
+| LSTM | 0.6629 | 148ms |
+| Random Forest | 0.6066 | 1238ms |
+| LGBM | 0.5912 | 1675ms |
