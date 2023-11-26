@@ -75,7 +75,7 @@ python tools/train_hrnet_prun.py
 
 # 🌐 Tabular data Classification
 
-| Model | mAP50 | inference time |
+| Model | acc | inference time |
 | --- | --- | --- |
 | LSTM | 0.6629 | 148ms |
 | Random Forest | 0.6066 | 1238ms |
